@@ -166,11 +166,7 @@ public class ContactForm extends FormLayout {
         		    e.getMessage(),
         		    Notification.TYPE_ERROR_MESSAGE, true)
         		    .show(Page.getCurrent());
-        }
-        
-        
-        
-        
+        }   
     }
 
     public void cancel(Button.ClickEvent event) {
