@@ -73,8 +73,7 @@ public class AddressbookUI extends UI {
         contactList.removeColumn("erfahrungsjahre");
         
         contactList.setSelectionMode(Grid.SelectionMode.SINGLE);
-        contactList.addSelectionListener(e
-                -> contactForm.edit((Mitarbeiter) contactList.getSelectedRow()));
+        //contactList.addSelectionListener(e -> contactForm.edit((Mitarbeiter) contactList.getSelectedRow()));
         refreshContacts();
                	
        sparteMap = buildHashMapForTree("<http://www.semanticweb.org/semanticOrg#Sparte>");
@@ -94,6 +93,9 @@ public class AddressbookUI extends UI {
         actions.setWidth("100%");
         filter.setWidth("100%");
         actions.setExpandRatio(filter, 1);
+        
+        contactList.setWidth("50%");
+        contactList.setHeight("50%");
         
         HorizontalLayout secondRow = new HorizontalLayout(tree, contactList, contactForm);
         
