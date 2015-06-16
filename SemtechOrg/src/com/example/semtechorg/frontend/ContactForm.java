@@ -30,7 +30,7 @@ public class ContactForm extends FormLayout {
 
     Button save = new Button("Save", this::save);
     Button cancel = new Button("Cancel", this::cancel);
-    Button addRow = new Button("Object Property hinzufÃ¼gen",this::addRow);
+    Button addRow = new Button("Object Property hinzufügen",this::addRow);
     TextField name = new TextField("Name");
     TextField beschreibung = new TextField("Beschreibung");
     TextField email = new TextField("Email");
