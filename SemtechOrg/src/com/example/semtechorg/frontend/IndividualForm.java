@@ -61,6 +61,8 @@ public class IndividualForm extends FormLayout {
             	Label l1 = new Label(c(it.getName()));
             	l1.addStyleName("fancylabel");
             	Label l2 = new Label(c(it.getValue()));
+            	l2.addStyleName("raben");
+            	
             	hlo.addComponent(l1);
             	hlo.addComponent(l2);
             	vl1.addComponent(hlo);
@@ -136,6 +138,7 @@ public class IndividualForm extends FormLayout {
         Notification.show("Cancelled", Type.TRAY_NOTIFICATION);
         getUI().contactList.select(null);
         getUI().individualForm.setVisible(false);
+        getUI().contactList.setVisible(true);
     }
 
 
@@ -150,6 +153,8 @@ public class IndividualForm extends FormLayout {
         //olc = new OWLComponent(in);
         //
         setVisible(in != null);
+        
+        getUI().contactList.setVisible(!isVisible());
     }
     
     public static String c(String str){

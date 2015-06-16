@@ -32,7 +32,7 @@ import org.semanticweb.owlapi.model.*;
  * the same instance, add @PreserveOnRefresh.
  */
 @Title("Semantic Organization")
-@Theme("valo")
+@Theme("semtechorgtheme")
 public class AddressbookUI extends UI {
 
     TextField filter = new TextField();
@@ -102,7 +102,7 @@ public class AddressbookUI extends UI {
         
         HorizontalLayout thirdRow = new HorizontalLayout(tree, contactList, individualForm);
         
-        HorizontalLayout secondRow = new HorizontalLayout(tree, contactList, contactForm);
+        HorizontalLayout secondRow = new HorizontalLayout(tree, contactList,individualForm, contactForm);
         
         VerticalLayout vert = new VerticalLayout(actions, secondRow,thirdRow);
         
