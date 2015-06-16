@@ -16,20 +16,20 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=SemtechOrg&amp;ivyXmlPath=ivy.xml&amp;confs=widgetset-compile&amp;ivySettingsPath=%24%7Bworkspace_loc%3ASemtechOrg%2Fivysettings.xml%7D&amp;loadSettingsOnDemand=false&amp;ivyUserDir=&amp;propertyFiles="/>
 	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=SemtechOrg&amp;ivyXmlPath=ivy.xml&amp;confs=nodeploy&amp;ivySettingsPath=%24%7Bworkspace_loc%3ASemtechOrg%2Fivysettings.xml%7D&amp;loadSettingsOnDemand=false&amp;ivyUserDir=&amp;propertyFiles="/>
-	<classpathentry kind="lib" path="/addressbook/HermiT.jar"/>
-	<classpathentry kind="lib" path="/addressbook/org.semanticweb.HermiT.jar"/>
-	<classpathentry kind="lib" path="/addressbook/owlapi-api-3.4.3-sources.jar"/>
-	<classpathentry kind="lib" path="/addressbook/owlapi-api-3.4.3.jar"/>
-	<classpathentry kind="lib" path="/addressbook/owlapi-apibinding-3.4.3-sources.jar"/>
-	<classpathentry kind="lib" path="/addressbook/owlapi-apibinding-3.4.3.jar"/>
-	<classpathentry kind="lib" path="/addressbook/owlapi-contract-3.4.3-sources.jar"/>
-	<classpathentry kind="lib" path="/addressbook/owlapi-contract-3.4.3.jar"/>
-	<classpathentry kind="lib" path="/addressbook/owlapi-impl-3.4.3-sources.jar"/>
-	<classpathentry kind="lib" path="/addressbook/owlapi-impl-3.4.3.jar"/>
-	<classpathentry kind="lib" path="/addressbook/owlapi-parsers-3.4.3-sources.jar"/>
-	<classpathentry kind="lib" path="/addressbook/owlapi-parsers-3.4.3.jar"/>
-	<classpathentry kind="lib" path="/addressbook/owlapi-tools-3.4.3-sources.jar"/>
-	<classpathentry kind="lib" path="/addressbook/owlapi-tools-3.4.3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/Users/Daniel/Dropbox/SS 2015/Semantische Technologien/UE/hermite/HermiT.jar"/>
+	<classpathentry kind="lib" path="/Users/Daniel/Dropbox/SS 2015/Semantische Technologien/UE/hermite/org.semanticweb.HermiT.jar"/>
+	<classpathentry kind="lib" path="/Users/Daniel/Dropbox/SS 2015/Semantische Technologien/UE/hermite/owlapi-parsers-3.4.3-sources.jar"/>
+	<classpathentry kind="lib" path="/Users/Daniel/Dropbox/SS 2015/Semantische Technologien/UE/hermite/owlapi-tools-3.4.3-sources.jar"/>
+	<classpathentry kind="lib" path="/Users/Daniel/Dropbox/SS 2015/Semantische Technologien/UE/hermite/owlapi-impl-3.4.3-sources.jar"/>
+	<classpathentry kind="lib" path="/Users/Daniel/Dropbox/SS 2015/Semantische Technologien/UE/hermite/owlapi-api-3.4.3-sources.jar"/>
+	<classpathentry kind="lib" path="/Users/Daniel/Dropbox/SS 2015/Semantische Technologien/UE/hermite/owlapi-apibinding-3.4.3-sources.jar"/>
+	<classpathentry kind="lib" path="/Users/Daniel/Dropbox/SS 2015/Semantische Technologien/UE/hermite/owlapi-contract-3.4.3-sources.jar"/>
+	<classpathentry kind="lib" path="/Users/Daniel/Dropbox/SS 2015/Semantische Technologien/UE/hermite/owlapi-parsers-3.4.3.jar"/>
+	<classpathentry kind="lib" path="/Users/Daniel/Dropbox/SS 2015/Semantische Technologien/UE/hermite/owlapi-api-3.4.3.jar"/>
+	<classpathentry kind="lib" path="/Users/Daniel/Dropbox/SS 2015/Semantische Technologien/UE/hermite/owlapi-impl-3.4.3.jar"/>
+	<classpathentry kind="lib" path="/Users/Daniel/Dropbox/SS 2015/Semantische Technologien/UE/hermite/owlapi-apibinding-3.4.3.jar"/>
+	<classpathentry kind="lib" path="/Users/Daniel/Dropbox/SS 2015/Semantische Technologien/UE/hermite/owlapi-contract-3.4.3.jar"/>
+	<classpathentry kind="lib" path="/Users/Daniel/Dropbox/SS 2015/Semantische Technologien/UE/hermite/owlapi-tools-3.4.3.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
