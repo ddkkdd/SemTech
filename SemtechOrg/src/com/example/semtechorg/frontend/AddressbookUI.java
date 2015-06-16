@@ -36,6 +36,7 @@ import org.semanticweb.owlapi.model.*;
 public class AddressbookUI extends UI {
 
     TextField filter = new TextField();
+    
     Grid contactList = new Grid();
     Button newContact = new Button("New contact");
 
