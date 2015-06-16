@@ -67,6 +67,9 @@ public class AddressbookUI extends UI {
         contactList.setContainerDataSource(new BeanItemContainer<>(Mitarbeiter.class));
         contactList.setColumnOrder("name", "beschreibung", "gehalt", "erfahrungsjahre","email");
         contactList.removeColumn("id");
+        contactList.removeColumn("beschreibung");
+        contactList.removeColumn("gehalt");
+        contactList.removeColumn("erfahrungsjahre");
         
         contactList.setSelectionMode(Grid.SelectionMode.SINGLE);
         contactList.addSelectionListener(e
