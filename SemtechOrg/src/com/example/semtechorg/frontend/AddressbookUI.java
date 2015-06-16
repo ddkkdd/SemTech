@@ -39,7 +39,7 @@ public class AddressbookUI extends UI {
     Grid contactList = new Grid();
     Button newContact = new Button("New contact");
 
-    // ContactForm is an example of a custom component class
+    
     ContactForm contactForm = new ContactForm();
     
     MyTree tree = new MyTree();
@@ -47,10 +47,6 @@ public class AddressbookUI extends UI {
     Map<String, String> bereichMap = new HashMap<String, String>();
     
     
-    // ContactService is a in-memory mock DAO that mimics
-    // a real-world datasource. Typically implemented for
-    // example as EJB or Spring Data based service.
-    //ContactService service = ContactService.createDemoService();
     SemanticService semService = SemanticService.createDemoService();
 
     @Override
@@ -69,10 +65,9 @@ public class AddressbookUI extends UI {
         filter.addTextChangeListener(e -> refreshContacts(e.getText()));
 
         contactList.setContainerDataSource(new BeanItemContainer<>(Mitarbeiter.class));
-//        contactList.setColumnOrder("firstName", "lastName", "email");
-//        contactList.removeColumn("id");
-//        contactList.removeColumn("birthDate");
-//        contactList.removeColumn("phone");
+        contactList.setColumnOrder("name", "beschreibung", "gehalt", "erfahrungsjahre","email");
+        contactList.removeColumn("id");
+        
         contactList.setSelectionMode(Grid.SelectionMode.SINGLE);
         contactList.addSelectionListener(e
                 -> contactForm.edit((Mitarbeiter) contactList.getSelectedRow()));
