@@ -42,6 +42,7 @@ public class AddressbookUI extends UI {
     Button showDetail = new Button("Alle Details");
     
     ContactForm contactForm = new ContactForm();
+    IndividualForm individualForm = new IndividualForm();
     
     MyTree tree = new MyTree();
     Map<String, String> sparteMap = new HashMap<String, String>();
@@ -61,6 +62,8 @@ public class AddressbookUI extends UI {
 
     private void configureComponents() {
         newContact.addClickListener(e -> contactForm.edit(new Mitarbeiter()));
+        showDetail.addClickListener(e -> individualForm.show(semService.getIndividualByName(
+        		((Mitarbeiter) contactList.getSelectedRow()).getName())));
 
         filter.setInputPrompt("Filter contacts...");
         filter.addTextChangeListener(e -> refreshContacts(e.getText()));
@@ -89,7 +92,7 @@ public class AddressbookUI extends UI {
 
     private void buildLayout() {
     	      
-        HorizontalLayout actions = new HorizontalLayout(filter, newContact);
+        HorizontalLayout actions = new HorizontalLayout(filter, newContact,showDetail);
         actions.setWidth("100%");
         filter.setWidth("100%");
         actions.setExpandRatio(filter, 1);
@@ -97,9 +100,11 @@ public class AddressbookUI extends UI {
         contactList.setWidth("50%");
         contactList.setHeight("50%");
         
+        HorizontalLayout thirdRow = new HorizontalLayout(tree, contactList, individualForm);
+        
         HorizontalLayout secondRow = new HorizontalLayout(tree, contactList, contactForm);
         
-        VerticalLayout vert = new VerticalLayout(actions, secondRow);
+        VerticalLayout vert = new VerticalLayout(actions, secondRow,thirdRow);
         
         HorizontalLayout hor = new HorizontalLayout(vert);
        
@@ -137,6 +142,7 @@ public class AddressbookUI extends UI {
     }
     
     public static String cutOutName (String iri){
+    	System.out.println(iri);
     	String tmp[] = iri.split("#");
     	return tmp[1].substring(0, tmp[1].length()-1);
     }

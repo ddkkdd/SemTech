@@ -179,8 +179,8 @@ public class SemanticService {
 		m = OWLManager.createOWLOntologyManager();
 
 		// String file = "/Mini2_OWL.owl";
-		//String file = "C:\\Users\\Peter\\Dropbox\\SemTech SS15\\Miniprojekt 2\\Mini2_OWL.owl";
-		 String file = "/Users/Daniel/Dropbox/SemTech SS15/Miniprojekt 2/Mini2_OWL.owl";
+		String file = "C:\\Users\\Peter\\Dropbox\\SemTech SS15\\Miniprojekt 2\\Mini2_OWL.owl";
+	//	 String file = "/Users/Daniel/Dropbox/SemTech SS15/Miniprojekt 2/Mini2_OWL.owl";
 
 		instance.clear();
 		o = m.loadOntologyFromOntologyDocument(new File(file));
@@ -194,9 +194,6 @@ public class SemanticService {
 		OWLClass Thing = factory.getOWLClass(IRI.create("http://www.w3.org/2002/07/owl#Thing"));
 		Set<OWLNamedIndividual> individuals = reasoner.getInstances(Thing, false).getFlattened();
 
-		
-		
-		
 		System.out.println("Anzahl: " + individuals.size());
 		long j = 0;
 		boolean isMA = false;
@@ -333,6 +330,19 @@ public class SemanticService {
 		for (Individual i : individuals.values()) {
 			if (i.getIndividualName().equals(iri)) {
 				return i.getIndividualByProperty(pname);
+			}
+		}
+		return null;
+	}
+	
+	public Individual getIndividualByName(String iname) {
+		
+		String name = "<"+iri + "#" + iname +">";
+		System.out.println("ACHTUNG ->"+name);
+		
+		for (Individual i : individuals.values()) {
+			if (i.getIndividualName().equals(name)) {
+				return i;
 			}
 		}
 		return null;

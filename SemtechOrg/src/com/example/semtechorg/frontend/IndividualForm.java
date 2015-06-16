@@ -32,7 +32,8 @@ public class IndividualForm extends FormLayout {
     Button cancel = new Button("Cancel", this::cancel);
     TextField name = new TextField();
     Individual in;
-    
+    Panel panel;
+    OWLComponent olc;
     
     SemanticService semService = SemanticService.createDemoService();
     
@@ -57,8 +58,9 @@ public class IndividualForm extends FormLayout {
             oprop.setContent(vl1);
             for (OWLConcept it : ind.getObjectProperties()){
             	HorizontalLayout hlo = new HorizontalLayout();
-            	Label l1 = new Label(it.getName());
-            	Label l2 = new Label(it.getValue());
+            	Label l1 = new Label(c(it.getName()));
+            	l1.addStyleName("fancylabel");
+            	Label l2 = new Label(c(it.getValue()));
             	hlo.addComponent(l1);
             	hlo.addComponent(l2);
             	vl1.addComponent(hlo);
@@ -66,28 +68,31 @@ public class IndividualForm extends FormLayout {
             
             Panel dprop = new Panel("Daten Properties");
             VerticalLayout vl2 = new VerticalLayout();
-            oprop.setContent(vl2);
+            dprop.setContent(vl2);
             for (OWLConcept it : ind.getDataProperties()){
             	HorizontalLayout hlp = new HorizontalLayout();
-            	Label l1 = new Label(it.getName());
-            	Label l2 = new Label(it.getValue());
+            	Label l1 = new Label(c(it.getName()));
+            	Label l2 = new Label(c(it.getValue()));
             	hlp.addComponent(l1);
             	hlp.addComponent(l2);
-            	vl1.addComponent(hlp);
+            	vl2.addComponent(hlp);
             }
             
             
             //panel.getContent().setSizeUndefined();
             //panel.setSizeUndefined();
-            setSizeUndefined();
+            //setSizeUndefined();
             
-            HorizontalLayout x = new HorizontalLayout();
+            VerticalLayout x = new VerticalLayout();
             x.addComponent(klassen);
             x.addComponent(oprop);
             x.addComponent(dprop);
             
+            Panel p = new Panel("Details");
+            p.setContent(x);
+            
             // The composition root MUST be set
-            setCompositionRoot(x);
+            setCompositionRoot(p);
         }
     }
 
@@ -102,23 +107,26 @@ public class IndividualForm extends FormLayout {
          * With Vaadin built-in styles you can highlight the primary save button
          * and give it a keyboard shortcut for a better UX.
          */
-        
         setVisible(false);
-        
         
     }
 
     private void buildLayout() {
+    	removeAllComponents();
         setSizeUndefined();
 
-        OWLComponent olc = new OWLComponent(in);
         
-        HorizontalLayout actions = new HorizontalLayout(cancel, olc);
+        HorizontalLayout actions = new HorizontalLayout(cancel);
         actions.setSpacing(true);
         
+        panel = new Panel("Details");
         
-        
+        if (this.in != null){
+        	olc = new OWLComponent(this.in);
+        	addComponents(olc);
+        }
 		addComponents(actions);
+		
     }
 
 
@@ -127,7 +135,7 @@ public class IndividualForm extends FormLayout {
         // Place to call business logic.
         Notification.show("Cancelled", Type.TRAY_NOTIFICATION);
         getUI().contactList.select(null);
-        getUI().contactForm.setVisible(false);
+        getUI().individualForm.setVisible(false);
     }
 
 
@@ -135,5 +143,19 @@ public class IndividualForm extends FormLayout {
     public AddressbookUI getUI() {
         return (AddressbookUI) super.getUI();
     }
-
+    
+    void show(Individual i) {
+        this.in = i;
+        buildLayout();
+        //olc = new OWLComponent(in);
+        //
+        setVisible(in != null);
+    }
+    
+    public static String c(String str){
+    	if (str.startsWith("<")) {
+    		return AddressbookUI.cutOutName(str);
+    	}
+    	return str;
+    }
 }

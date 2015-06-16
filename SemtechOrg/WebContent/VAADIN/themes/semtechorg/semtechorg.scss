@@ -33,4 +33,20 @@
   @include valo;
 
   // Insert your own theme rules here
+  .fancylabel {
+    margin: 5px;
+    padding: 20px;
+    background: yellow;
+    color: blue;
+    font-size: 30px;
+    font-weight: bold;
+}
+}
+ .fancylabel {
+    margin: 5px;
+    padding: 20px;
+    background: yellow;
+    color: blue;
+    font-size: 30px;
+    font-weight: bold;
 }
