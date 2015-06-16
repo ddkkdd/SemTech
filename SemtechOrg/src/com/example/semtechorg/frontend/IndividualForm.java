@@ -28,64 +28,66 @@ import com.vaadin.ui.Tree;
  */
 public class IndividualForm extends FormLayout {
 
-    Button save = new Button("Save", this::save);
+    
     Button cancel = new Button("Cancel", this::cancel);
-    Button addRow = new Button("Object Property hinzuf�gen",this::addRow);
-    TextField name = new TextField("Name");
-    TextField beschreibung = new TextField("Beschreibung");
-    TextField email = new TextField("Email");
-    TextField gehalt = new TextField("Gehalt");
-    TextField erfahrungsjahre = new TextField("Erfahrungsjahre");
+    TextField name = new TextField();
+    Individual in;
     
     
-    EmployeeRow[] emps = new EmployeeRow[10];
-    int rows = 0;
-    
-    
-
     SemanticService semService = SemanticService.createDemoService();
     
-    Mitarbeiter mitarbeiter;
-
-    // Easily bind forms to beans and manage validation and buffering
-    BeanFieldGroup<Mitarbeiter> formFieldBindings;
-
-    
-    class EmployeeRow extends CustomComponent {
-    	private TextField objekt;
-    	private ComboBox select;
+    class OWLComponent extends CustomComponent {
     	
-        public EmployeeRow(String property) {
+    	Individual individual;
+    	
+        public OWLComponent(Individual ind) {
             // A layout structure used for composition
-            Panel panel = new Panel("neues Property");
-            HorizontalLayout hl = new HorizontalLayout();
-            HorizontalLayout vl = new HorizontalLayout();
-            panel.setContent(vl);
-
-            // Compose from multiple components
-            select = new ComboBox("Beziehung");
-            try {
-				select.addItems(SemanticService.getObjectProperties());
-			} catch (UnsupportedOperationException e) {
-				e.printStackTrace();
-			} catch (OWLOntologyCreationException e) {
-				e.printStackTrace();
-			}
+        	this.individual = ind;
+    		Label name = new Label(ind.getIndividualName());
+            Panel klassen = new Panel("Klassen");
+            VerticalLayout vl = new VerticalLayout();
+            klassen.setContent(vl);
+            for (String it : ind.getClasses()){
+            	Label l = new Label(it);
+            	vl.addComponent(l);
+            }
+            
+            Panel oprop = new Panel("Objekt Properties");
+            VerticalLayout vl1 = new VerticalLayout();
+            oprop.setContent(vl1);
+            for (OWLConcept it : ind.getObjectProperties()){
+            	HorizontalLayout hlo = new HorizontalLayout();
+            	Label l1 = new Label(it.getName());
+            	Label l2 = new Label(it.getValue());
+            	hlo.addComponent(l1);
+            	hlo.addComponent(l2);
+            	vl1.addComponent(hlo);
+            }
+            
+            Panel dprop = new Panel("Daten Properties");
+            VerticalLayout vl2 = new VerticalLayout();
+            oprop.setContent(vl2);
+            for (OWLConcept it : ind.getDataProperties()){
+            	HorizontalLayout hlp = new HorizontalLayout();
+            	Label l1 = new Label(it.getName());
+            	Label l2 = new Label(it.getValue());
+            	hlp.addComponent(l1);
+            	hlp.addComponent(l2);
+            	vl1.addComponent(hlp);
+            }
             
             
-            hl.addComponent(select);
-            objekt = new TextField("Objekt");
-            hl.addComponent(objekt);
-            
-            vl.addComponent(hl);
-            // Set the size as undefined at all levels
-            panel.getContent().setSizeUndefined();
-            panel.setSizeUndefined();
+            //panel.getContent().setSizeUndefined();
+            //panel.setSizeUndefined();
             setSizeUndefined();
             
-
+            HorizontalLayout x = new HorizontalLayout();
+            x.addComponent(klassen);
+            x.addComponent(oprop);
+            x.addComponent(dprop);
+            
             // The composition root MUST be set
-            setCompositionRoot(panel);
+            setCompositionRoot(x);
         }
     }
 
@@ -100,8 +102,7 @@ public class IndividualForm extends FormLayout {
          * With Vaadin built-in styles you can highlight the primary save button
          * and give it a keyboard shortcut for a better UX.
          */
-        save.setStyleName(ValoTheme.BUTTON_PRIMARY);
-        save.setClickShortcut(ShortcutAction.KeyCode.ENTER);
+        
         setVisible(false);
         
         
@@ -109,65 +110,18 @@ public class IndividualForm extends FormLayout {
 
     private void buildLayout() {
         setSizeUndefined();
-        
-        
-        
-        //setMargin(new MarginInfo(true, true, true, true));
 
-        HorizontalLayout actions = new HorizontalLayout(save, cancel, addRow);
+        OWLComponent olc = new OWLComponent(in);
+        
+        HorizontalLayout actions = new HorizontalLayout(cancel, olc);
         actions.setSpacing(true);
         
-        name.setRequired(true);
-        beschreibung.setRequired(true);
-        email.setRequired(true);
-        gehalt.setRequired(true);
-        erfahrungsjahre.setRequired(true);
         
-		addComponents(actions, name, beschreibung, email, gehalt, erfahrungsjahre);
+        
+		addComponents(actions);
     }
 
 
-    public void save(Button.ClickEvent event) {
-        try {
-        	name.commit();
-        	beschreibung.commit();
-        	email.commit();
-        	gehalt.commit();
-        	erfahrungsjahre.commit();
-        	
-            formFieldBindings.commit();
-            
-            getUI().semService.saveIndividual(this.name.getValue(), "Mitarbeiter");
-            getUI().semService.saveDataProperty(this.name.getValue(), "Beschreibung", this.beschreibung.getValue());
-            getUI().semService.saveDataProperty(this.name.getValue(), "hatEmailAdresse", this.email.getValue());
-            getUI().semService.saveDataProperty(this.name.getValue(), "Gehalt", this.gehalt.getValue());
-            getUI().semService.saveDataProperty(this.name.getValue(), "Erfahrungsjahre", this.erfahrungsjahre.getValue());
-            
-            for (int i = 0; i < rows && i < 10; i++) {
-            	getUI().semService.saveObjectProperty(this.name.getValue(),(String)emps[i].select.getValue(),emps[i].objekt.getValue());
-            }
-
-            String msg = String.format("'%s %s' gespeichert.",
-            		this.name.getValue(),
-            		this.beschreibung.getValue());
-            Notification.show(msg,Type.TRAY_NOTIFICATION);
-            getUI().refreshContacts();
-        } catch (FieldGroup.CommitException e) {
-        
-        } catch (InvalidValueException  e) {
-        	new Notification("Alle Felder müssen befüllt sein",
-        			
-        			"",
-        		    Notification.TYPE_ERROR_MESSAGE, true)
-        		    .show(Page.getCurrent());
-            
-        } catch (Exception e){
-        	new Notification("Fehler: ",
-        		    e.getMessage(),
-        		    Notification.TYPE_ERROR_MESSAGE, true)
-        		    .show(Page.getCurrent());
-        }   
-    }
 
     public void cancel(Button.ClickEvent event) {
         // Place to call business logic.
@@ -176,32 +130,10 @@ public class IndividualForm extends FormLayout {
         getUI().contactForm.setVisible(false);
     }
 
-    void edit(Mitarbeiter mitarbeiter) {
-        this.mitarbeiter = mitarbeiter;
-        if(mitarbeiter != null) {
-            // Bind the properties of the contact POJO to fiels in this form
-            formFieldBindings = BeanFieldGroup.bindFieldsBuffered(mitarbeiter, this);
-            name.focus();
-        }
-        setVisible(mitarbeiter != null);
-    }
-    
-    public void addRow(Button.ClickEvent event) {
-    	rows++;
-    	for (int i = 0; i < rows && i < 10; i++) {
-			if (emps[i] == null) 
-				emps[i] = new EmployeeRow("new");
-			addComponent(emps[i]);
-		}
-    }
-    
 
     @Override
     public AddressbookUI getUI() {
         return (AddressbookUI) super.getUI();
     }
-
-    
-    
 
 }

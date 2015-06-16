@@ -38,8 +38,8 @@ public class AddressbookUI extends UI {
     TextField filter = new TextField();
     
     Grid contactList = new Grid();
-    Button newContact = new Button("New contact");
-
+    Button newContact = new Button("Neuer Mitarbeiter");
+    Button showDetail = new Button("Alle Details");
     
     ContactForm contactForm = new ContactForm();
     
