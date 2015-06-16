@@ -43,5 +43,9 @@
 		<!-- Compiler for custom widget sets. Should not be deployed -->
 		<dependency org="com.vaadin" name="vaadin-client-compiler"
 			rev="&vaadin.version;" conf="widgetset-compile->default" />
+			
+		<dependency org="commons-beanutils" name="commons-beanutils" rev="1.8.3"/>
+
+			
 	</dependencies>
 </ivy-module>
