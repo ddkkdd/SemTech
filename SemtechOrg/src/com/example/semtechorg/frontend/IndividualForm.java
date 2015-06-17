@@ -88,7 +88,7 @@ public class IndividualForm extends FormLayout {
             //panel.setSizeUndefined();
             //setSizeUndefined();
             
-            VerticalLayout x = new VerticalLayout();
+            HorizontalLayout x = new HorizontalLayout();
             x.addComponent(klassen);
             x.addComponent(oprop);
             x.addComponent(dprop);
