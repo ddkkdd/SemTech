@@ -126,12 +126,12 @@ public class IndividualForm extends FormLayout {
         
         panel = new Panel("Details");
         
+        addComponents(actions);
+        
         if (this.in != null){
         	olc = new OWLComponent(this.in);
         	addComponents(olc);
         }
-		addComponents(actions);
-		
     }
 
 

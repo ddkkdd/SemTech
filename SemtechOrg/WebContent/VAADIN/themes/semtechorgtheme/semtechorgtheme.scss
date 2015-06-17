@@ -49,4 +49,45 @@
     //font-size: 30px;
     //font-weight: bold;
 	}
+	
+	.h1 {
+		//color:gray;
+    	//font-family:verdana;
+    	font-size:300%;
+    	width:98%;
+    	margin: 10px;
+		padding: 10px;
+		background: #dfeef3;
+		border-style: groove;
+	}
+	
+	.tree {
+		margin: 10px;
+		padding: 10px;
+		background: #dfeef3;
+		border-style: groove;
+	}
+	
+	.element {
+		margin: 10px;
+		padding: 10px;
+		text-align: center;
+	}
+	
+	.listMitarbeiter {
+		margin: 10px;
+		padding: 10px;
+		width: 70%;
+		height: 50%;
+		position: relative;
+		left: 10px;
+		top: -9px;
+	}
+	
+	.contactForm{
+		/*position: relative;
+		left: -500px;
+		top: 400px;
+		padding: 10px;*/
+	}
 }

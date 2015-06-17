@@ -15,10 +15,12 @@ import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
+import com.vaadin.event.SelectionEvent.SelectionListener;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.*;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.Tree.CollapseEvent;
 import com.vaadin.ui.Tree.ExpandEvent;
 
@@ -40,7 +42,8 @@ public class AddressbookUI extends UI {
     
     Grid contactList = new Grid();
     Button newContact = new Button("Neuer Mitarbeiter");
-    Button showDetail = new Button("Alle Details");
+    Button showDetail = new Button("Alle Details", this::showDetail);
+    Label heading = new Label("Semantic Organization");
     
     ContactForm contactForm = new ContactForm();
     IndividualForm individualForm = new IndividualForm();
@@ -62,12 +65,23 @@ public class AddressbookUI extends UI {
 
 
     private void configureComponents() {
-        newContact.addClickListener(e -> contactForm.edit(new Mitarbeiter()));
+        heading.setStyleName("h1");
+        newContact.setStyleName("element");
+        showDetail.setStyleName("element");
+        filter.setStyleName("element");
+        contactList.setStyleName("listMitarbeiter");
+        individualForm.setStyleName("listMitarbeiter");
+        contactForm.setStyleName("contactForm");
+                
+        tree.setStyleName("tree");
+    	
+    	newContact.addClickListener(e -> contactForm.edit(new Mitarbeiter()));
 
-		showDetail.addClickListener(e -> individualForm.show(semService
-				.getIndividualByName(((Mitarbeiter) contactList.getSelectedRow()).getName())));
-
+		showDetail.addClickListener(e -> individualForm.show(
+				semService.getIndividualByName(((Mitarbeiter) contactList.getSelectedRow()).getName())));
+				
         filter.setInputPrompt("Filter contacts...");
+        
         filter.addTextChangeListener(e -> refreshContacts(e.getText()));
 
         contactList.setContainerDataSource(new BeanItemContainer<>(Mitarbeiter.class));
@@ -79,6 +93,7 @@ public class AddressbookUI extends UI {
         
         contactList.setSelectionMode(Grid.SelectionMode.SINGLE);
         contactList.addSelectionListener(e -> contactForm.edit((Mitarbeiter) contactList.getSelectedRow()));
+        contactList.addItemClickListener(e -> contactList.setVisible(false));
         refreshContacts();
                	
        buildHashMapForTree("<http://www.semanticweb.org/semanticOrg#Sparte>");
@@ -104,7 +119,7 @@ public class AddressbookUI extends UI {
         
         HorizontalLayout secondRow = new HorizontalLayout(tree, contactList,individualForm, contactForm);
         
-        VerticalLayout vert = new VerticalLayout(actions, secondRow,thirdRow);
+        VerticalLayout vert = new VerticalLayout(heading, actions, secondRow,thirdRow);
         
         HorizontalLayout hor = new HorizontalLayout(vert);
        
@@ -177,5 +192,9 @@ public class AddressbookUI extends UI {
 		}
 	}
     
-    
+    public void showDetail(Button.ClickEvent event) {
+        // Place to call business logic.
+    	Notification.show("Alle Details", Type.TRAY_NOTIFICATION);
+        contactForm.setVisible(false);
+    }    
 }

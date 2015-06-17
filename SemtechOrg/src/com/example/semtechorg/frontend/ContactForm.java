@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 
+import com.vaadin.client.ui.richtextarea.VRichTextToolbar.Strings;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
@@ -12,11 +13,14 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.Page;
 import com.vaadin.shared.ui.MarginInfo;
 import com.example.semtechorg.backend.*;
+import com.google.common.escape.Escapers;
+import com.google.common.html.HtmlEscapers;
+import com.google.gwt.thirdparty.guava.common.escape.Escaper;
+import com.google.gwt.thirdparty.streamhtmlparser.util.HtmlUtils;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.themes.ValoTheme;
 import com.vaadin.ui.Tree;
-
 
 /* Create custom UI Components.
  *
@@ -30,7 +34,10 @@ public class ContactForm extends FormLayout {
 
     Button save = new Button("Speichern", this::save);
     Button cancel = new Button("Abbrechen", this::cancel);
-    Button addRow = new Button("Objekt Property hinzufügen",this::addRow);
+    
+    Label heading = new Label("Bearbeiten");
+    
+    Button addRow = new Button("Property hinzufuegen",this::addRow);
     TextField name = new TextField("Name");
     TextField beschreibung = new TextField("Beschreibung");
     TextField email = new TextField("Email");
@@ -101,11 +108,11 @@ public class ContactForm extends FormLayout {
          * With Vaadin built-in styles you can highlight the primary save button
          * and give it a keyboard shortcut for a better UX.
          */
+    	heading.setStyleName("h3");
+    	
         save.setStyleName(ValoTheme.BUTTON_PRIMARY);
         save.setClickShortcut(ShortcutAction.KeyCode.ENTER);
-        setVisible(false);
-        
-        
+        setVisible(false);       
     }
 
     private void buildLayout() {
@@ -125,8 +132,9 @@ public class ContactForm extends FormLayout {
         erfahrungsjahre.setRequired(true);
         abteilung.setRequired(true);
         
+        GridLayout grid = new GridLayout(6,2);
         
-		addComponents(actions, name, beschreibung, email, gehalt, erfahrungsjahre,abteilung);
+		addComponents(heading, actions, name, beschreibung, email, gehalt, erfahrungsjahre,abteilung);
     }
 
 
@@ -158,6 +166,7 @@ public class ContactForm extends FormLayout {
             		this.beschreibung.getValue());
             Notification.show(msg,Type.TRAY_NOTIFICATION);
             getUI().refreshContacts();
+            getUI().contactList.setVisible(true);
         } catch (FieldGroup.CommitException e) {
         
         } catch (InvalidValueException  e) {
@@ -180,6 +189,7 @@ public class ContactForm extends FormLayout {
         Notification.show("Cancelled", Type.TRAY_NOTIFICATION);
         getUI().contactList.select(null);
         getUI().contactForm.setVisible(false);
+        getUI().contactList.setVisible(true);
     }
 
     void edit(Mitarbeiter mitarbeiter) {
