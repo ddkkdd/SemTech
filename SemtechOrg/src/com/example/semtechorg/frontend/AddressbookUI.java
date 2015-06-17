@@ -113,7 +113,9 @@ public class AddressbookUI extends UI {
         filter.setWidth("100%");
         actions.setExpandRatio(filter, 1);
         
+
         HorizontalLayout secondRow = new HorizontalLayout(tree, contactList, individualForm, contactForm);
+
         
         VerticalLayout vert = new VerticalLayout(heading, actions, secondRow);
         
