@@ -82,12 +82,11 @@ public class ProjektIndividualForm extends FormLayout {
             	hlp.addComponent(l2);
             	vl2.addComponent(hlp);
             }
-            
-            
-            //panel.getContent().setSizeUndefined();
-            //panel.setSizeUndefined();
-            //setSizeUndefined();
-            
+            Label l1 = new Label(c(ind.getIndividualName()));
+        	l1.addStyleName("fancylabel");
+        	vl2.addComponent(l1);
+        	
+        	
             HorizontalLayout x = new HorizontalLayout();
             x.addComponent(klassen);
             x.addComponent(oprop);
@@ -95,6 +94,7 @@ public class ProjektIndividualForm extends FormLayout {
             
             Panel p = new Panel("Details");
             p.setContent(x);
+            p.setSizeFull();
             
             // The composition root MUST be set
             setCompositionRoot(p);

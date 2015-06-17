@@ -28,7 +28,6 @@ import com.vaadin.ui.Tree;
  */
 public class IndividualForm extends FormLayout {
 
-    
     Button cancel = new Button("Cancel", this::cancel);
     TextField name = new TextField();
     Individual in;
@@ -84,9 +83,9 @@ public class IndividualForm extends FormLayout {
             }
             
             
-            //panel.getContent().setSizeUndefined();
-            //panel.setSizeUndefined();
-            //setSizeUndefined();
+//            panel.getContent().setSizeUndefined();
+//            panel.setSizeUndefined();
+//            setSizeUndefined();
             
             HorizontalLayout x = new HorizontalLayout();
             x.addComponent(klassen);
