@@ -94,6 +94,7 @@ public class AddressbookUI extends UI {
         contactList.setSelectionMode(Grid.SelectionMode.SINGLE);
         contactList.addSelectionListener(e -> contactForm.edit((Mitarbeiter) contactList.getSelectedRow()));
         contactList.addItemClickListener(e -> contactList.setVisible(false));
+        contactList.setVisible(false);
         refreshContacts();
                	
        buildHashMapForTree("<http://www.semanticweb.org/semanticOrg#Sparte>");
@@ -112,14 +113,9 @@ public class AddressbookUI extends UI {
         filter.setWidth("100%");
         actions.setExpandRatio(filter, 1);
         
-        contactList.setWidth("50%");
-        contactList.setHeight("50%");
+        HorizontalLayout secondRow = new HorizontalLayout(tree, contactList, individualForm, contactForm);
         
-        HorizontalLayout thirdRow = new HorizontalLayout(tree, contactList, individualForm);
-        
-        HorizontalLayout secondRow = new HorizontalLayout(tree, contactList,individualForm, contactForm);
-        
-        VerticalLayout vert = new VerticalLayout(heading, actions, secondRow,thirdRow);
+        VerticalLayout vert = new VerticalLayout(heading, actions, secondRow);
         
         HorizontalLayout hor = new HorizontalLayout(vert);
        

@@ -113,7 +113,6 @@ public class IndividualForm extends FormLayout {
          * and give it a keyboard shortcut for a better UX.
          */
         setVisible(false);
-        
     }
 
     private void buildLayout() {

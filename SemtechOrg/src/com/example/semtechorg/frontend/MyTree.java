@@ -1,9 +1,5 @@
 package com.example.semtechorg.frontend;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
-
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.ui.Tree;
@@ -24,6 +20,7 @@ public class MyTree extends Tree{
             public void itemClick(ItemClickEvent event) {
             	getUI().fliterContacts(event.getItemId().toString());
                 System.out.print(event.getItemId().toString());
+                getUI().contactList.setVisible(true);
             }
         });
         
