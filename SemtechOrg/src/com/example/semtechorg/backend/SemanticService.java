@@ -327,13 +327,9 @@ public class SemanticService {
 	}
 
 	public List<Individual> getIndividualByClass(String classname) {
-		System.out.println("Metallica");
-		System.out.println(classname);
 		List<Individual> classIndividuals = new ArrayList<>();
 		for (Entry<Long, Individual> s : individuals.entrySet()) {
-				
 			if (s.getValue().isClassMember(classname)) {
-				System.out.println(s.getValue());
 				classIndividuals.add(s.getValue());
 			}
 		}
