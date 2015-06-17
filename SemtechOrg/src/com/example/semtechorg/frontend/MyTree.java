@@ -46,14 +46,19 @@ public class MyTree extends Tree{
 		}
     }*/
 	
+	
 	public void addElements(String parent, String child){
+		System.out.println(parent+ " enthalten? ->"+this.containsId(parent)+" kind="+child);
 		if (!this.containsId(parent)){
 			this.addItem(parent);
+			System.out.println("add parent-> "+parent);
 		}
+		
 	
 		if (!this.containsId(child)){
 			this.addItem(child);
 			this.setParent(child, parent);
+			System.out.println("add children-> "+child);
 		}
 	}
 }

@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.example.semtechorg.backend.*;
 import com.vaadin.annotations.Theme;
@@ -80,12 +81,10 @@ public class AddressbookUI extends UI {
         contactList.addSelectionListener(e -> contactForm.edit((Mitarbeiter) contactList.getSelectedRow()));
         refreshContacts();
                	
-       sparteMap = buildHashMapForTree("<http://www.semanticweb.org/semanticOrg#Sparte>");
-       bereichMap = buildHashMapBereichForTree("<http://www.semanticweb.org/semanticOrg#Bereich>");
+       buildHashMapForTree("<http://www.semanticweb.org/semanticOrg#Sparte>");
+       buildHashMapBereichForTree("<http://www.semanticweb.org/semanticOrg#Bereich>");
        
-       buildTreeOutOfHashMap(sparteMap);
-   	   buildTreeOutOfHashMap(bereichMap);
-   	    	
+       
        //expand Tree
        for (Object itemId: tree.getItemIds())
            tree.expandItem(itemId);
@@ -127,37 +126,25 @@ public class AddressbookUI extends UI {
     public static class MyUIServlet extends VaadinServlet {
     }
     
-    public HashMap<String, String> buildHashMapForTree(String iri){
-    	Map <String, String> map = new HashMap<String, String>();
-    	
+    public void buildHashMapForTree(String iri){
     	for (Individual it : semService.getIndividualByClass(iri)){
         	for (OWLConcept concept: it.getObjectProperties()){
         		System.out.println(concept.getName());
-				if (concept.getName().equals("<http://www.semanticweb.org/semanticOrg#hatBereich>")){
-					map.put(it.getIndividualName(), concept.getValue());
-					
-					System.out.println("Sparte: "+it.getIndividualName());
-					System.out.println("Bereich: "+concept.getValue()+"\n");
+				if (concept.getName().equals("<http://www.semanticweb.org/semanticOrg#hatBereich>")){		
+					tree.addElements(cutOutName(it.getIndividualName()), cutOutName(concept.getValue()));
 				}
 			}
 		}
-    	return (HashMap<String, String>) map;
     }
     
-    public HashMap<String, String> buildHashMapBereichForTree(String iri){
-    	Map <String, String> map = new HashMap<String, String>();
-    	
+    public void buildHashMapBereichForTree(String iri){
     	for (Individual it : semService.getIndividualByClass(iri)){
         	for (OWLConcept concept: it.getObjectProperties()){
         		if (concept.getName().equals("<http://www.semanticweb.org/semanticOrg#hatAbteilung>")){
-					map.put(it.getIndividualName(), concept.getValue());
-					
-					System.out.println("Sparte: "+it.getIndividualName());
-					System.out.println("Bereich: "+concept.getValue()+"\n");
+					tree.addElements(cutOutName(it.getIndividualName()), cutOutName(concept.getValue()));			
         		}
 			}
 		}
-    	return (HashMap<String, String>) map;
     }
     
     public static String cutOutName (String iri){
@@ -167,13 +154,12 @@ public class AddressbookUI extends UI {
     }
     
     public void buildTreeOutOfHashMap(Map<String, String> map){
-		Iterator it = map.entrySet().iterator();
-    	while (it.hasNext()){
-    		Map.Entry entry = (Map.Entry)it.next();
-    		String parent = cutOutName(entry.getKey().toString());
-    		String child = cutOutName(entry.getValue().toString());
+		
+		for (Entry<String, String> it : map.entrySet()){
+			String parent = cutOutName(it.getKey().toString());
+    		String child = cutOutName(it.getValue().toString());
     		tree.addElements(parent, child);
-    	}
+		}
 	}
     
     
