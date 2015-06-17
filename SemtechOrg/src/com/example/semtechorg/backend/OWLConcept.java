@@ -10,9 +10,17 @@ public class OWLConcept implements Serializable, Cloneable {
 		this.name = name;
 		this.value = value;
 	}
+	
+	public OWLConcept(String name, String value, String type) {
+		super();
+		this.name = name;
+		this.value = value;
+		this.type = type;
+	}
 
 	private String name = "";
 	private String value = "";
+	private String type = "";
 
 
 
@@ -48,6 +56,18 @@ public class OWLConcept implements Serializable, Cloneable {
 
 	public void setValue(String value) {
 		this.value = value;
+	}
+
+
+
+	public String getType() {
+		return type;
+	}
+
+
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 

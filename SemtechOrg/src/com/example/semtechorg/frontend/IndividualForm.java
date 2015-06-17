@@ -49,7 +49,7 @@ public class IndividualForm extends FormLayout {
             VerticalLayout vl = new VerticalLayout();
             klassen.setContent(vl);
             for (String it : ind.getClasses()){
-            	Label l = new Label(it);
+            	Label l = new Label(c(it));
             	l.addStyleName("fancylabel");
             	vl.addComponent(l);
             }

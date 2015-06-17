@@ -15,7 +15,12 @@ import java.util.Date;
 // class and nothing Vaadin specific.
 public class Mitarbeiter implements Serializable, Cloneable {
 
-    private Long id;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -5186107535815311412L;
+
+	private Long id;
 
     private String Name = "";
     private String Beschreibung= "";

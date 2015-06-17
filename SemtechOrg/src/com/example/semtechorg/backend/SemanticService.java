@@ -1,10 +1,14 @@
 package com.example.semtechorg.backend;
 
 import org.apache.commons.beanutils.BeanUtils;
+
+import uk.ac.manchester.cs.owlapi.dlsyntax.DLSyntaxObjectRenderer; 
+
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.collections.map.LinkedMap;
 import org.semanticweb.HermiT.Reasoner;
 import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.io.OWLObjectRenderer;
 import org.semanticweb.owlapi.model.AddAxiom;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAxiom;
@@ -28,6 +32,8 @@ import org.semanticweb.owlapi.reasoner.InferenceType;
 import org.semanticweb.owlapi.reasoner.Node;
 import org.semanticweb.owlapi.reasoner.NodeSet;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
+import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
+import org.semanticweb.owlapi.reasoner.SimpleConfiguration;
 
 import com.vaadin.server.VaadinService;
 import com.vaadin.ui.CustomField;
@@ -58,6 +64,7 @@ public class SemanticService {
 	private static OWLOntology o;
 	private static OWLOntologyManager m;
 	private static OWLDataFactory df = OWLManager.getOWLDataFactory();
+	private static OWLObjectRenderer renderer = new DLSyntaxObjectRenderer(); 
 
 	public static void main(String[] args) throws OWLException, IOException {
 		createDemoService();
@@ -81,12 +88,15 @@ public class SemanticService {
 		System.out.println("Print object properties...");
 		System.out.println(getObjectProperties());
 
-//		instance.saveObjectProperty("Helmberger_Peter", "istVorgesetzterVon", "Burgstaller_Andreas");
-//		instance.saveObjectProperty("Helmberger_Peter", "istVorgesetzterVon", "sepp");
-		
+		// instance.saveObjectProperty("Helmberger_Peter", "istVorgesetzterVon",
+		// "Burgstaller_Andreas");
+		// instance.saveObjectProperty("Helmberger_Peter", "istVorgesetzterVon",
+		// "sepp");
+
 		try {
-//			instance.saveDataProperty("Helmberger_Peter", "Erfahrungsjahre", "raben");
-			//instance.saveIndividual("Bereich_RD_Bau","Mitarbeiter");
+			// instance.saveDataProperty("Helmberger_Peter", "Erfahrungsjahre",
+			// "raben");
+			// instance.saveIndividual("Bereich_RD_Bau","Mitarbeiter");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -156,7 +166,7 @@ public class SemanticService {
 		individuals.put(entry.getId(), entry);
 		System.out.println(individuals.size());
 	}
-	
+
 	public synchronized void clear() {
 		individuals = new HashMap<>();
 		mitarbeiter = new HashMap<>();
@@ -180,19 +190,22 @@ public class SemanticService {
 
 		// String file = "/Mini2_OWL.owl";
 		String file = "C:\\Users\\Peter\\Dropbox\\SemTech SS15\\Miniprojekt 2\\Mini2_OWL.owl";
-	//	 String file = "/Users/Daniel/Dropbox/SemTech SS15/Miniprojekt 2/Mini2_OWL.owl";
+		// String file =
+		// "/Users/Daniel/Dropbox/SemTech SS15/Miniprojekt 2/Mini2_OWL.owl";
 
 		instance.clear();
 		o = m.loadOntologyFromOntologyDocument(new File(file));
 
+        
 		reasoner = new Reasoner(o);
 		System.out.println("Reasoner-Name: " + reasoner.getReasonerName());
-		reasoner.precomputeInferences(InferenceType.CLASS_HIERARCHY,InferenceType.CLASS_ASSERTIONS,InferenceType.OBJECT_PROPERTY_ASSERTIONS,InferenceType.OBJECT_PROPERTY_HIERARCHY);
-		
-		
-		
+		reasoner.precomputeInferences(InferenceType.CLASS_HIERARCHY,
+				InferenceType.CLASS_ASSERTIONS, InferenceType.OBJECT_PROPERTY_ASSERTIONS,
+				InferenceType.OBJECT_PROPERTY_HIERARCHY);
+
 		OWLDataFactory factory = m.getOWLDataFactory();
 		OWLClass Thing = factory.getOWLClass(IRI.create("http://www.w3.org/2002/07/owl#Thing"));
+		OWLObjectProperty skip = factory.getOWLTopObjectProperty();
 		Set<OWLNamedIndividual> individuals = reasoner.getInstances(Thing, false).getFlattened();
 
 		System.out.println("Anzahl: " + individuals.size());
@@ -207,8 +220,6 @@ public class SemanticService {
 			j++;
 			System.out.println(ind);
 
-			
-			
 			Map<OWLDataPropertyExpression, Set<OWLLiteral>> dataProperties = ind
 					.getDataPropertyValues(o);
 			for (Entry<OWLDataPropertyExpression, Set<OWLLiteral>> d : dataProperties.entrySet()) {
@@ -220,56 +231,88 @@ public class SemanticService {
 					}
 				}
 			}
-			Map<OWLObjectPropertyExpression, Set<OWLIndividual>> objectProperties = ind
+//			Map<OWLObjectPropertyExpression, Set<OWLIndividual>> objectProperties = ind
+//					.getObjectPropertyValues(o);
+//			for (Entry<OWLObjectPropertyExpression, Set<OWLIndividual>> d : objectProperties
+//					.entrySet()) {
+//				if (d.getKey() != null) {
+//					for (OWLIndividual s : d.getValue()) {
+//						opm.add(new OWLConcept(d.getKey().toString(), s.toString()));
+//						// System.out.println(d.getKey().toString()+"  ---  "+s.toString());
+//
+//					}
+//				}
+//			}
+//	
+//////////////////////////////
+			Map<OWLObjectPropertyExpression, Set<OWLIndividual>> assertedValues = ind
 					.getObjectPropertyValues(o);
-			for (Entry<OWLObjectPropertyExpression, Set<OWLIndividual>> d : objectProperties
-					.entrySet()) {
-				if (d.getKey() != null) {
-					for (OWLIndividual s : d.getValue()) {
-						opm.add(new OWLConcept(d.getKey().toString(), s.toString()));
-						// System.out.println(d.getKey().toString()+"  ---  "+s.toString());
-
+			System.out.println("Anzahl->" + assertedValues.size());
+			for (OWLObjectProperty objProp : o.getObjectPropertiesInSignature(true)) {
+				if (!objProp.equals(skip)){
+					for (OWLNamedIndividual i : reasoner.getObjectPropertyValues(ind, objProp)
+							.getFlattened()) {
+							boolean asserted = false;
+							if (assertedValues.get(objProp) != null) {
+								asserted = assertedValues.get(objProp).contains(ind);
+								
+							}
+							opm.add(new OWLConcept(objProp.toString(), i.toString()));
 					}
 				}
 			}
+////////////////////////////////						
+			
 
 			isMA = false;
-
 			List<String> classes = new LinkedList<String>();
-
 			NodeSet<OWLClass> owlclasses = reasoner.getTypes(ind, false);
 			for (Node<OWLClass> s : owlclasses) {
 				for (OWLClass c : s) {
 					classes.add(c.toString());
-
-					isMA = isMA
-							| c.toString().equals(
-									"<http://www.semanticweb.org/semanticOrg#Mitarbeiter>");
-
+					isMA = isMA | c.toString().equals("<http://www.semanticweb.org/semanticOrg#Mitarbeiter>");
 				}
 			}
 
 			Individual i = new Individual(j, ind.toString(), dpm, opm, classes);
-			
+
 			if (isMA) {
 				instance.saveMA(i.createMitarbeiter());
 			}
-			
+
 			instance.save(i);
 
 		}
 
 	}
 
+	public void getIndividual(String iname) {
+
+		OWLNamedIndividual subject = df.getOWLNamedIndividual(IRI.create(iri + "#" + iname));
+		System.out.println(IRI.create(iri + "#" + iname));
+		System.out.println(subject);
+		Map<OWLObjectPropertyExpression, Set<OWLIndividual>> assertedValues = subject
+				.getObjectPropertyValues(o);
+		System.out.println("Anzahl->" + assertedValues.size());
+		for (OWLObjectProperty objProp : o.getObjectPropertiesInSignature(true)) {
+			for (OWLNamedIndividual ind : reasoner.getObjectPropertyValues(subject, objProp).getFlattened()) {
+				boolean asserted = false;
+				if (assertedValues.get(objProp) != null) {
+					asserted = assertedValues.get(objProp).contains(ind);
+				}
+			}
+		}
+	}
+
 	public synchronized List<Mitarbeiter> findAllMA(String stringFilter) {
-		//pehe
+		// pehe
 		try {
 			loadOntology();
 		} catch (OWLOntologyCreationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		ArrayList<Mitarbeiter> arrayList = new ArrayList<Mitarbeiter>();
 		for (Mitarbeiter i : mitarbeiter.values()) {
 			System.out.println(i);
@@ -316,7 +359,6 @@ public class SemanticService {
 	}
 
 	public List<Individual> getIndividualByClass(String classname) {
-		// private HashMap<Long, Individual> individuals = new HashMap<>();
 		List<Individual> classIndividuals = new ArrayList<>();
 		for (Entry<Long, Individual> s : individuals.entrySet()) {
 			if (s.getValue().isClassMember(classname)) {
@@ -327,9 +369,6 @@ public class SemanticService {
 	}
 
 	public List<String> getIndividualByProperty(String iri, String pname) {
-		// private HashMap<Long, Individual> individuals = new HashMap<>();
-		// List<Individual> pIndividuals = new ArrayList<>();
-
 		for (Individual i : individuals.values()) {
 			if (i.getIndividualName().equals(iri)) {
 				return i.getIndividualByProperty(pname);
@@ -337,12 +376,12 @@ public class SemanticService {
 		}
 		return null;
 	}
-	
+
 	public Individual getIndividualByName(String iname) {
-		
-		String name = "<"+iri + "#" + iname +">";
-		System.out.println("ACHTUNG ->"+name);
-		
+		getIndividual(iname);
+		String name = "<" + iri + "#" + iname + ">";
+		System.out.println("ACHTUNG ->" + name);
+
 		for (Individual i : individuals.values()) {
 			if (i.getIndividualName().equals(name)) {
 				return i;
@@ -363,76 +402,76 @@ public class SemanticService {
 
 		AddAxiom addAxiomChange = new AddAxiom(o, assertion);
 		m.applyChange(addAxiomChange);
-		
+
 		reasoner.flush();
-		
-		System.out.println("Reasoner consistent? "+reasoner.isConsistent());
-		if (!reasoner.isConsistent()){
-			RemoveAxiom removeAxiom = new RemoveAxiom(o,assertion);
+
+		System.out.println("Reasoner consistent? " + reasoner.isConsistent());
+		if (!reasoner.isConsistent()) {
+			RemoveAxiom removeAxiom = new RemoveAxiom(o, assertion);
 			m.applyChange(removeAxiom);
-			throw new Exception("Axiom ("+sString+" "+opString+" "+oString+") würde zu einer Inkonsitenz in der Ontologie führen");
-		} else{
+			throw new Exception("Axiom (" + sString + " " + opString + " " + oString
+					+ ") würde zu einer Inkonsitenz in der Ontologie führen");
+		} else {
 			m.saveOntology(o);
 		}
-		
+
 	}
-	
-	public void saveDataProperty(String sString, String opString, String value)
-			throws Exception {
+
+	public void saveDataProperty(String sString, String opString, String value) throws Exception {
 		OWLIndividual subject = df.getOWLNamedIndividual(IRI.create(iri + "#" + sString));
-		
+
 		OWLLiteral literal = df.getOWLLiteral(value);
-		
+
 		try {
-		    int foo = Integer.parseInt(value);
-		    literal= df.getOWLLiteral(foo);    
+			int foo = Integer.parseInt(value);
+			literal = df.getOWLLiteral(foo);
 		} catch (NumberFormatException e) {
-			
+
 		}
-		
-		OWLDataProperty dataProperty = df
-				.getOWLDataProperty(IRI.create(iri + "#" + opString));
+
+		OWLDataProperty dataProperty = df.getOWLDataProperty(IRI.create(iri + "#" + opString));
 
 		OWLAxiom assertion = df.getOWLDataPropertyAssertionAxiom(dataProperty, subject, literal);
-		
+
 		AddAxiom addAxiomChange = new AddAxiom(o, assertion);
-		System.out.println("Reasoner consistent? "+reasoner.isConsistent());
-		
+		System.out.println("Reasoner consistent? " + reasoner.isConsistent());
+
 		m.applyChange(addAxiomChange);
 		reasoner.flush();
-		
-		System.out.println("Reasoner consistent? "+reasoner.isConsistent());
-		if (!reasoner.isConsistent()){
-			RemoveAxiom removeAxiom = new RemoveAxiom(o,assertion);
+
+		System.out.println("Reasoner consistent? " + reasoner.isConsistent());
+		if (!reasoner.isConsistent()) {
+			RemoveAxiom removeAxiom = new RemoveAxiom(o, assertion);
 			m.applyChange(removeAxiom);
 			System.out.println(addAxiomChange);
-			throw new Exception("Axiom ("+sString+" "+opString+" "+value+") würde zu einer Inkonsitenz in der Ontologie führen");
-		} else{
+			throw new Exception("Axiom (" + sString + " " + opString + " " + value
+					+ ") würde zu einer Inkonsitenz in der Ontologie führen");
+		} else {
 			m.saveOntology(o);
 		}
 	}
-	
-	public void saveIndividual(String sString, String cString)
-			throws Exception {
-		
+
+	public void saveIndividual(String sString, String cString) throws Exception {
+
 		OWLIndividual subject = df.getOWLNamedIndividual(IRI.create(iri + "#" + sString));
-				
+
 		OWLClass owlclass = df.getOWLClass(IRI.create(iri + "#" + cString));
 		OWLAxiom assertion = df.getOWLClassAssertionAxiom(owlclass, subject);
-		
+
 		AddAxiom addAxiomChange = new AddAxiom(o, assertion);
-		System.out.println("Reasoner consistent? "+reasoner.isConsistent());
-		
+		System.out.println("Reasoner consistent? " + reasoner.isConsistent());
+
 		m.applyChange(addAxiomChange);
 		reasoner.flush();
-		
-		System.out.println("Reasoner consistent? "+reasoner.isConsistent());
-		if (!reasoner.isConsistent()){
-			RemoveAxiom removeAxiom = new RemoveAxiom(o,assertion);
+
+		System.out.println("Reasoner consistent? " + reasoner.isConsistent());
+		if (!reasoner.isConsistent()) {
+			RemoveAxiom removeAxiom = new RemoveAxiom(o, assertion);
 			m.applyChange(removeAxiom);
 			System.out.println(addAxiomChange);
-			throw new Exception("Axiom ("+sString+" "+cString+") würde zu einer Inkonsitenz in der Ontologie führen");
-		} else{
+			throw new Exception("Axiom (" + sString + " " + cString
+					+ ") würde zu einer Inkonsitenz in der Ontologie führen");
+		} else {
 			m.saveOntology(o);
 		}
 	}

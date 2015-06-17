@@ -8,13 +8,13 @@ import java.util.List;
 import java.util.Map;
 
 import com.example.semtechorg.backend.*;
-import com.example.semtechorg.backend.Mitarbeiter;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
+import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.*;
@@ -62,8 +62,9 @@ public class AddressbookUI extends UI {
 
     private void configureComponents() {
         newContact.addClickListener(e -> contactForm.edit(new Mitarbeiter()));
-        showDetail.addClickListener(e -> individualForm.show(semService.getIndividualByName(
-        		((Mitarbeiter) contactList.getSelectedRow()).getName())));
+
+		showDetail.addClickListener(e -> individualForm.show(semService
+				.getIndividualByName(((Mitarbeiter) contactList.getSelectedRow()).getName())));
 
         filter.setInputPrompt("Filter contacts...");
         filter.addTextChangeListener(e -> refreshContacts(e.getText()));
@@ -76,11 +77,11 @@ public class AddressbookUI extends UI {
         contactList.removeColumn("erfahrungsjahre");
         
         contactList.setSelectionMode(Grid.SelectionMode.SINGLE);
-        //contactList.addSelectionListener(e -> contactForm.edit((Mitarbeiter) contactList.getSelectedRow()));
+        contactList.addSelectionListener(e -> contactForm.edit((Mitarbeiter) contactList.getSelectedRow()));
         refreshContacts();
                	
        sparteMap = buildHashMapForTree("<http://www.semanticweb.org/semanticOrg#Sparte>");
-       bereichMap = buildHashMapForTree("<http://www.semanticweb.org/semanticOrg#Bereich>");
+       bereichMap = buildHashMapBereichForTree("<http://www.semanticweb.org/semanticOrg#Bereich>");
        
        buildTreeOutOfHashMap(sparteMap);
    	   buildTreeOutOfHashMap(bereichMap);
@@ -131,11 +132,29 @@ public class AddressbookUI extends UI {
     	
     	for (Individual it : semService.getIndividualByClass(iri)){
         	for (OWLConcept concept: it.getObjectProperties()){
-				
-				map.put(it.getIndividualName(), concept.getValue());
-				
-				System.out.println("Sparte: "+it.getIndividualName());
-				System.out.println("Bereich: "+concept.getValue()+"\n");
+        		System.out.println(concept.getName());
+				if (concept.getName().equals("<http://www.semanticweb.org/semanticOrg#hatBereich>")){
+					map.put(it.getIndividualName(), concept.getValue());
+					
+					System.out.println("Sparte: "+it.getIndividualName());
+					System.out.println("Bereich: "+concept.getValue()+"\n");
+				}
+			}
+		}
+    	return (HashMap<String, String>) map;
+    }
+    
+    public HashMap<String, String> buildHashMapBereichForTree(String iri){
+    	Map <String, String> map = new HashMap<String, String>();
+    	
+    	for (Individual it : semService.getIndividualByClass(iri)){
+        	for (OWLConcept concept: it.getObjectProperties()){
+        		if (concept.getName().equals("<http://www.semanticweb.org/semanticOrg#hatAbteilung>")){
+					map.put(it.getIndividualName(), concept.getValue());
+					
+					System.out.println("Sparte: "+it.getIndividualName());
+					System.out.println("Bereich: "+concept.getValue()+"\n");
+        		}
 			}
 		}
     	return (HashMap<String, String>) map;
@@ -156,4 +175,6 @@ public class AddressbookUI extends UI {
     		tree.addElements(parent, child);
     	}
 	}
+    
+    
 }

@@ -26,6 +26,10 @@ import java.util.Set;
 // class and nothing Vaadin specific.
 public class Individual implements Serializable, Cloneable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1202175854636377682L;
 	private Long id;
 	private String individualName;
 	private List<OWLConcept> dataProperties;

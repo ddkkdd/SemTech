@@ -28,9 +28,9 @@ import com.vaadin.ui.Tree;
  */
 public class ContactForm extends FormLayout {
 
-    Button save = new Button("Save", this::save);
-    Button cancel = new Button("Cancel", this::cancel);
-    Button addRow = new Button("Object Property hinzufügen",this::addRow);
+    Button save = new Button("Speichern", this::save);
+    Button cancel = new Button("Abbrechen", this::cancel);
+    Button addRow = new Button("Objekt Property hinzufügen",this::addRow);
     TextField name = new TextField("Name");
     TextField beschreibung = new TextField("Beschreibung");
     TextField email = new TextField("Email");

@@ -15,7 +15,12 @@ import java.util.Date;
 // class and nothing Vaadin specific.
 public class Organisationseinheit implements Serializable, Cloneable {
 
-    private Long id;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6000573249818492564L;
+
+	private Long id;
 
     private String Name = "";
     private String Klasse = "";
