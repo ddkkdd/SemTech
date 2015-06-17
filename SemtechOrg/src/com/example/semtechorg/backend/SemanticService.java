@@ -198,6 +198,7 @@ public class SemanticService {
 				InferenceType.CLASS_ASSERTIONS, InferenceType.OBJECT_PROPERTY_ASSERTIONS,
 				InferenceType.OBJECT_PROPERTY_HIERARCHY);
 
+		
 		OWLDataFactory factory = m.getOWLDataFactory();
 		OWLClass Thing = factory.getOWLClass(IRI.create("http://www.w3.org/2002/07/owl#Thing"));
 		OWLObjectProperty skip = factory.getOWLTopObjectProperty();
