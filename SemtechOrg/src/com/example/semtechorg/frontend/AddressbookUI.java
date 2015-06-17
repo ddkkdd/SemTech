@@ -94,7 +94,7 @@ public class AddressbookUI extends UI {
         contactList.setSelectionMode(Grid.SelectionMode.SINGLE);
         contactList.addSelectionListener(e -> contactForm.edit((Mitarbeiter) contactList.getSelectedRow()));
         contactList.addItemClickListener(e -> contactList.setVisible(false));
-        contactList.setVisible(false);
+        
         refreshContacts();
                	
        buildHashMapForTree("<http://www.semanticweb.org/semanticOrg#Sparte>");
