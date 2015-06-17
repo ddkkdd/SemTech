@@ -133,9 +133,6 @@ public class ContactForm extends FormLayout {
     private void buildLayout() {
         this.removeAllComponents();
     	setSizeUndefined();
-    	
-        
-        //setMargin(new MarginInfo(true, true, true, true));
 
         HorizontalLayout actions = new HorizontalLayout(save, cancel, addRow);
         actions.setSpacing(true);

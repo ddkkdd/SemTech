@@ -120,7 +120,6 @@ public class SemanticService {
 	private long nextId = 0;
 
 	public synchronized List<Individual> findAll(String stringFilter) {
-		System.out.println("PEHE TEST");
 		ArrayList<Individual> arrayList = new ArrayList<Individual>();
 		for (Individual i : individuals.values()) {
 			try {
@@ -162,7 +161,6 @@ public class SemanticService {
 			throw new RuntimeException(ex);
 		}
 		individuals.put(entry.getId(), entry);
-		System.out.println(individuals.size());
 	}
 
 	public synchronized void clear() {
@@ -182,18 +180,13 @@ public class SemanticService {
 	}
 
 	public static void loadOntology() throws OWLOntologyCreationException {
-		// System.out.println(VaadinService.getCurrent().getBaseDirectory().toString());
-
 		m = OWLManager.createOWLOntologyManager();
 
-		// String file = "/Mini2_OWL.owl";
 		String file = "C:\\Users\\Peter\\Dropbox\\SemTech SS15\\Miniprojekt 2\\Mini2_OWL.owl";
 		//String file = "/Users/Daniel/Dropbox/SemTech SS15/Miniprojekt 2/Mini2_OWL.owl";
 
 		instance.clear();
 		o = m.loadOntologyFromOntologyDocument(new File(file));
-
-        
 		reasoner = new Reasoner(o);
 		System.out.println("Reasoner-Name: " + reasoner.getReasonerName());
 		reasoner.precomputeInferences(InferenceType.CLASS_HIERARCHY,
@@ -206,7 +199,6 @@ public class SemanticService {
 		OWLObjectProperty skip = factory.getOWLTopObjectProperty();
 		Set<OWLNamedIndividual> individuals = reasoner.getInstances(Thing, false).getFlattened();
 
-		System.out.println("Anzahl: " + individuals.size());
 		long j = 0;
 		boolean isMA = false;
 
@@ -216,23 +208,19 @@ public class SemanticService {
 			List<OWLConcept> opm = new LinkedList<OWLConcept>();
 
 			j++;
-			System.out.println(ind);
-
 			Map<OWLDataPropertyExpression, Set<OWLLiteral>> dataProperties = ind
 					.getDataPropertyValues(o);
 			for (Entry<OWLDataPropertyExpression, Set<OWLLiteral>> d : dataProperties.entrySet()) {
 				if (d.getKey() != null) {
 					for (OWLLiteral s : d.getValue()) {
-
 						dpm.add(new OWLConcept(d.getKey().toString(), s.getLiteral()));
-						// System.out.println(d.getKey().toString()+"  ---  "+s.getLiteral());
 					}
 				}
 			}
 
 			Map<OWLObjectPropertyExpression, Set<OWLIndividual>> assertedValues = ind
 					.getObjectPropertyValues(o);
-			System.out.println("Anzahl->" + assertedValues.size());
+			
 			for (OWLObjectProperty objProp : o.getObjectPropertiesInSignature(true)) {
 				if (!objProp.equals(skip)){
 					for (OWLNamedIndividual i : reasoner.getObjectPropertyValues(ind, objProp)
@@ -271,11 +259,9 @@ public class SemanticService {
 	public void getIndividual(String iname) {
 
 		OWLNamedIndividual subject = df.getOWLNamedIndividual(IRI.create(iri + "#" + iname));
-		System.out.println(IRI.create(iri + "#" + iname));
-		System.out.println(subject);
 		Map<OWLObjectPropertyExpression, Set<OWLIndividual>> assertedValues = subject
 				.getObjectPropertyValues(o);
-		System.out.println("Anzahl->" + assertedValues.size());
+		
 		for (OWLObjectProperty objProp : o.getObjectPropertiesInSignature(true)) {
 			for (OWLNamedIndividual ind : reasoner.getObjectPropertyValues(subject, objProp).getFlattened()) {
 				boolean asserted = false;
@@ -337,13 +323,17 @@ public class SemanticService {
 			throw new RuntimeException(ex);
 		}
 		mitarbeiter.put(entry.getId(), entry);
-		System.out.println("MITARBEITER hinzugefügt ->" + mitarbeiter.size());
+		
 	}
 
 	public List<Individual> getIndividualByClass(String classname) {
+		System.out.println("Metallica");
+		System.out.println(classname);
 		List<Individual> classIndividuals = new ArrayList<>();
 		for (Entry<Long, Individual> s : individuals.entrySet()) {
+				
 			if (s.getValue().isClassMember(classname)) {
+				System.out.println(s.getValue());
 				classIndividuals.add(s.getValue());
 			}
 		}
@@ -368,7 +358,6 @@ public class SemanticService {
 
 		for (Node<OWLClass> range : reasoner.getObjectPropertyRanges(objectProperty, true)){
 			for (OWLClass n : range){
-				System.out.println("KLASSE->"+n.toString());
 				for (Individual i : getIndividualByClass(n.toString())){
 					
 					list.add(AddressbookUI.cutOutName(i.getIndividualName()));					
@@ -381,7 +370,6 @@ public class SemanticService {
 	public Individual getIndividualByName(String iname) {
 		getIndividual(iname);
 		String name = "<" + iri + "#" + iname + ">";
-		System.out.println("ACHTUNG ->" + name);
 
 		for (Individual i : individuals.values()) {
 			if (i.getIndividualName().equals(name)) {

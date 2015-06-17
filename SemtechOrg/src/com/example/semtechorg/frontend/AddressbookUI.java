@@ -43,15 +43,16 @@ public class AddressbookUI extends UI {
     Grid contactList = new Grid();
     Button newContact = new Button("Neuer Mitarbeiter");
     Button showDetail = new Button("Alle Details", this::showDetail);
+    Button showProjekt = new Button("Alle Projekte", this::showProjekt);
     Label heading = new Label("Semantic Organization");
     
     ContactForm contactForm = new ContactForm();
     IndividualForm individualForm = new IndividualForm();
+    ProjektIndividualForm projektForm = new ProjektIndividualForm();
     
     MyTree tree = new MyTree();
     Map<String, String> sparteMap = new HashMap<String, String>();
     Map<String, String> bereichMap = new HashMap<String, String>();
-    
     
     SemanticService semService = SemanticService.createDemoService();
 
@@ -59,18 +60,17 @@ public class AddressbookUI extends UI {
     protected void init(VaadinRequest request) {
         configureComponents();
         buildLayout();
-        
-       
     }
-
 
     private void configureComponents() {
         heading.setStyleName("h1");
         newContact.setStyleName("element");
         showDetail.setStyleName("element");
+        showProjekt.setStyleName("element");
         filter.setStyleName("element");
         contactList.setStyleName("listMitarbeiter");
         individualForm.setStyleName("listMitarbeiter");
+        projektForm.setStyleName("listMitarbeiter");
         contactForm.setStyleName("contactForm");
                 
         tree.setStyleName("tree");
@@ -79,7 +79,10 @@ public class AddressbookUI extends UI {
 
 		showDetail.addClickListener(e -> individualForm.show(
 				semService.getIndividualByName(((Mitarbeiter) contactList.getSelectedRow()).getName())));
-				
+		
+		showProjekt.addClickListener(e -> projektForm.show(
+				semService.getIndividualByClass("<http://www.semanticweb.org/semanticOrg#Projekt>")));
+		
         filter.setInputPrompt("Mitarbeiter suchen...");
         
         filter.addTextChangeListener(e -> refreshContacts(e.getText()));
@@ -108,13 +111,13 @@ public class AddressbookUI extends UI {
 
     private void buildLayout() {
     	      
-        HorizontalLayout actions = new HorizontalLayout(filter, newContact,showDetail);
+        HorizontalLayout actions = new HorizontalLayout(filter, newContact,showDetail,showProjekt);
         actions.setWidth("100%");
         filter.setWidth("100%");
         actions.setExpandRatio(filter, 1);
         
 
-        HorizontalLayout secondRow = new HorizontalLayout(tree, contactList, individualForm, contactForm);
+        HorizontalLayout secondRow = new HorizontalLayout(tree, contactList, individualForm, contactForm,projektForm);
 
         
         VerticalLayout vert = new VerticalLayout(heading, actions, secondRow);
@@ -155,8 +158,7 @@ public class AddressbookUI extends UI {
     public void buildHashMapForTree(String iri){
     	for (Individual it : semService.getIndividualByClass(iri)){
         	for (OWLConcept concept: it.getObjectProperties()){
-        		System.out.println(concept.getName());
-				if (concept.getName().equals("<http://www.semanticweb.org/semanticOrg#hatBereich>")){		
+        		if (concept.getName().equals("<http://www.semanticweb.org/semanticOrg#hatBereich>")){		
 					tree.addElements(cutOutName(it.getIndividualName()), cutOutName(concept.getValue()));
 				}
 			}
@@ -176,7 +178,7 @@ public class AddressbookUI extends UI {
     public static String cutOutName (String iri){
     	if (iri == null || iri.equals(""))
     		return "";
-    	System.out.println(iri);
+    	
     	String tmp[] = iri.split("#");
     	return tmp[1].substring(0, tmp[1].length()-1);
     }
@@ -193,6 +195,12 @@ public class AddressbookUI extends UI {
     public void showDetail(Button.ClickEvent event) {
         // Place to call business logic.
     	Notification.show("Alle Details", Type.TRAY_NOTIFICATION);
+        contactForm.setVisible(false);
+    }
+    
+    public void showProjekt(Button.ClickEvent event) {
+        // Place to call business logic.
+    	Notification.show("Alle Projekte", Type.TRAY_NOTIFICATION);
         contactForm.setVisible(false);
     }    
 }
