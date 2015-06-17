@@ -116,7 +116,7 @@ public class ProjektIndividualForm extends FormLayout {
     }
 
     private void buildLayout() {
-    	System.out.println("buildlayout");
+
     	removeAllComponents();
         setSizeUndefined();
 
@@ -137,7 +137,7 @@ public class ProjektIndividualForm extends FormLayout {
         	}        	
         }
         addComponent(vl);
-        System.out.println("End build layout");
+
     }
 
 
@@ -157,16 +157,10 @@ public class ProjektIndividualForm extends FormLayout {
     }
     
     void show(List<Individual> i) {
-    	System.out.println("show aufgerufen");
-
-		for (Individual it : i){
-    		System.out.println(it.toString());
-    	}
+		
     	
         this.in = i;
         buildLayout();
-        //olc = new OWLComponent(in);
-        //
         setVisible(in != null);
         
         
