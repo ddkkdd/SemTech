@@ -13,6 +13,7 @@ import org.semanticweb.owlapi.model.AddAxiom;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLDataProperty;
 import org.semanticweb.owlapi.model.OWLDataPropertyExpression;
@@ -35,6 +36,7 @@ import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
 import org.semanticweb.owlapi.reasoner.SimpleConfiguration;
 
+import com.example.semtechorg.frontend.AddressbookUI;
 import com.vaadin.server.VaadinService;
 import com.vaadin.ui.CustomField;
 
@@ -173,7 +175,7 @@ public class SemanticService {
 		List<String> list = new LinkedList<String>();
 
 		for (OWLObjectProperty it : o.getObjectPropertiesInSignature(true)) {
-
+			
 			list.add(it.getIRI().toString().substring(it.getIRI().toString().indexOf("#") + 1));
 		}
 		return list;
@@ -356,6 +358,25 @@ public class SemanticService {
 		}
 		return null;
 	}
+	
+	public List<String> getIndividualByProperty2(String pname) {
+		List<String> list = new LinkedList<String>();
+		if ((pname == null) || (pname.equals("")))
+			return list;
+		OWLObjectProperty objectProperty = df
+				.getOWLObjectProperty(IRI.create(iri + "#" + pname));
+
+		for (Node<OWLClass> range : reasoner.getObjectPropertyRanges(objectProperty, true)){
+			for (OWLClass n : range){
+				System.out.println("KLASSE->"+n.toString());
+				for (Individual i : getIndividualByClass(n.toString())){
+					
+					list.add(AddressbookUI.cutOutName(i.getIndividualName()));					
+				}
+			}
+		}
+		return list;
+	}
 
 	public Individual getIndividualByName(String iname) {
 		getIndividual(iname);
@@ -390,7 +411,7 @@ public class SemanticService {
 			RemoveAxiom removeAxiom = new RemoveAxiom(o, assertion);
 			m.applyChange(removeAxiom);
 			throw new Exception("Axiom (" + sString + " " + opString + " " + oString
-					+ ") wÃ¼rde zu einer Inkonsitenz in der Ontologie fÃ¼hren");
+					+ ") würde zu einer Inkonsitenz in der Ontologie führen");
 		} else {
 			m.saveOntology(o);
 		}
@@ -399,18 +420,16 @@ public class SemanticService {
 
 	public void saveDataProperty(String sString, String opString, String value) throws Exception {
 		OWLIndividual subject = df.getOWLNamedIndividual(IRI.create(iri + "#" + sString));
-
 		OWLLiteral literal = df.getOWLLiteral(value);
 
 		try {
 			int foo = Integer.parseInt(value);
 			literal = df.getOWLLiteral(foo);
 		} catch (NumberFormatException e) {
-
+			//nothing
 		}
 
 		OWLDataProperty dataProperty = df.getOWLDataProperty(IRI.create(iri + "#" + opString));
-
 		OWLAxiom assertion = df.getOWLDataPropertyAssertionAxiom(dataProperty, subject, literal);
 
 		AddAxiom addAxiomChange = new AddAxiom(o, assertion);
@@ -425,7 +444,7 @@ public class SemanticService {
 			m.applyChange(removeAxiom);
 			System.out.println(addAxiomChange);
 			throw new Exception("Axiom (" + sString + " " + opString + " " + value
-					+ ") wÃ¼rde zu einer Inkonsitenz in der Ontologie fÃ¼hren");
+					+ ") würde zu einer Inkonsitenz in der Ontologie führen");
 		} else {
 			m.saveOntology(o);
 		}

@@ -48,8 +48,6 @@ public class ContactForm extends FormLayout {
     
     EmployeeRow[] emps = new EmployeeRow[10];
     int rows = 0;
-    
-    
 
     SemanticService semService = SemanticService.createDemoService();
     
@@ -60,7 +58,7 @@ public class ContactForm extends FormLayout {
 
     
     class EmployeeRow extends CustomComponent {
-    	private TextField objekt;
+    	private ComboBox cobjekt;
     	private ComboBox select;
     	
         public EmployeeRow(String property) {
@@ -71,7 +69,23 @@ public class ContactForm extends FormLayout {
             panel.setContent(vl);
 
             // Compose from multiple components
+            cobjekt = new ComboBox("Objekt");
+            cobjekt.setNewItemsAllowed(true);
+            cobjekt.setImmediate(true);
+            
+            
             select = new ComboBox("Beziehung");
+            select.setInvalidAllowed(false);
+            select.setNewItemsAllowed(false);
+            select.addValueChangeListener(e -> 
+            {	
+            	
+            	cobjekt.removeAllItems();
+            	cobjekt.addItems(semService.getIndividualByProperty2(select.getValue().toString()));
+            });
+            
+            //.addTextChangeListener(e -> refreshContacts(e.getText()));
+            
             try {
 				select.addItems(SemanticService.getObjectProperties());
 			} catch (UnsupportedOperationException e) {
@@ -82,8 +96,9 @@ public class ContactForm extends FormLayout {
             
             
             hl.addComponent(select);
-            objekt = new TextField("Objekt");
-            hl.addComponent(objekt);
+            //objekt = new TextField("Objekt");
+            //hl.addComponent(objekt);
+            hl.addComponent(cobjekt);
             
             vl.addComponent(hl);
             // Set the size as undefined at all levels
@@ -116,9 +131,9 @@ public class ContactForm extends FormLayout {
     }
 
     private void buildLayout() {
-        setSizeUndefined();
-        
-        
+        this.removeAllComponents();
+    	setSizeUndefined();
+    	
         
         //setMargin(new MarginInfo(true, true, true, true));
 
@@ -135,6 +150,16 @@ public class ContactForm extends FormLayout {
         GridLayout grid = new GridLayout(6,2);
         
 		addComponents(heading, actions, name, beschreibung, email, gehalt, erfahrungsjahre,abteilung);
+		
+		
+		VerticalLayout vl = new VerticalLayout();  
+		for (int i = 0; i < this.rows && i < 10; i++) {
+			System.out.println("ich baue mich");
+			if (this.emps[i] == null) 
+				this.emps[i] = new EmployeeRow("new");
+			vl.addComponent(this.emps[i]);
+		}
+		addComponent(vl);
     }
 
 
@@ -158,7 +183,7 @@ public class ContactForm extends FormLayout {
             getUI().semService.saveObjectProperty(this.name.getValue(), "arbeitetInAbteilung",(String) this.abteilung.getValue());
             
             for (int i = 0; i < rows && i < 10; i++) {
-            	getUI().semService.saveObjectProperty(this.name.getValue(),(String)emps[i].select.getValue(),emps[i].objekt.getValue());
+            	getUI().semService.saveObjectProperty(this.name.getValue(),(String)emps[i].select.getValue(),(String)emps[i].cobjekt.getValue());
             }
 
             String msg = String.format("'%s %s' gespeichert.",
@@ -193,8 +218,10 @@ public class ContactForm extends FormLayout {
     }
 
     void edit(Mitarbeiter mitarbeiter) {
-    	emps = new EmployeeRow[10];
-    	rows = 0;
+    	this.emps = new EmployeeRow[10];
+    	this.rows = 0;
+    	System.out.println("anzahl:"+rows);
+    	
         this.mitarbeiter = mitarbeiter;
         for (Individual i :  getUI().semService.getIndividualByClass("<http://www.semanticweb.org/semanticOrg#Abteilung>")){
         	abteilung.addItems(AddressbookUI.cutOutName(i.getIndividualName()));
@@ -204,17 +231,19 @@ public class ContactForm extends FormLayout {
             formFieldBindings = BeanFieldGroup.bindFieldsBuffered(mitarbeiter, this);
             name.focus();
         }
+        
         getUI().contactList.setVisible(!(mitarbeiter != null));
         setVisible(mitarbeiter != null);
+        buildLayout();
     }
     
     public void addRow(Button.ClickEvent event) {
-    	rows++;
-    	for (int i = 0; i < rows && i < 10; i++) {
-			if (emps[i] == null) 
-				emps[i] = new EmployeeRow("new");
-			addComponent(emps[i]);
-		}
+    	System.out.println(rows);
+    	this.rows++;
+    	System.out.println(rows);
+    	System.out.println("rows ende");
+    	
+    	buildLayout();
     }
     
 
