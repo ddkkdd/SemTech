@@ -44,12 +44,13 @@ public class IndividualForm extends FormLayout {
         public OWLComponent(Individual ind) {
             // A layout structure used for composition
         	this.individual = ind;
-    		Label name = new Label(ind.getIndividualName());
+    		Label name = new Label(c(ind.getIndividualName()));
             Panel klassen = new Panel("Klassen");
             VerticalLayout vl = new VerticalLayout();
             klassen.setContent(vl);
             for (String it : ind.getClasses()){
             	Label l = new Label(it);
+            	l.addStyleName("fancylabel");
             	vl.addComponent(l);
             }
             
@@ -61,7 +62,7 @@ public class IndividualForm extends FormLayout {
             	Label l1 = new Label(c(it.getName()));
             	l1.addStyleName("fancylabel");
             	Label l2 = new Label(c(it.getValue()));
-            	l2.addStyleName("raben");
+            	l2.addStyleName("fancyvalue");
             	
             	hlo.addComponent(l1);
             	hlo.addComponent(l2);
@@ -74,7 +75,9 @@ public class IndividualForm extends FormLayout {
             for (OWLConcept it : ind.getDataProperties()){
             	HorizontalLayout hlp = new HorizontalLayout();
             	Label l1 = new Label(c(it.getName()));
+            	l1.addStyleName("fancylabel");
             	Label l2 = new Label(c(it.getValue()));
+            	l2.addStyleName("fancyvalue");
             	hlp.addComponent(l1);
             	hlp.addComponent(l2);
             	vl2.addComponent(hlp);

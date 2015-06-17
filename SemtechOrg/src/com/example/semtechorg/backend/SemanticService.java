@@ -187,8 +187,9 @@ public class SemanticService {
 
 		reasoner = new Reasoner(o);
 		System.out.println("Reasoner-Name: " + reasoner.getReasonerName());
-		reasoner.precomputeInferences(InferenceType.CLASS_HIERARCHY);
-
+		reasoner.precomputeInferences(InferenceType.CLASS_HIERARCHY,InferenceType.CLASS_ASSERTIONS,InferenceType.OBJECT_PROPERTY_ASSERTIONS,InferenceType.OBJECT_PROPERTY_HIERARCHY);
+		
+		
 		
 		OWLDataFactory factory = m.getOWLDataFactory();
 		OWLClass Thing = factory.getOWLClass(IRI.create("http://www.w3.org/2002/07/owl#Thing"));
@@ -206,6 +207,8 @@ public class SemanticService {
 			j++;
 			System.out.println(ind);
 
+			
+			
 			Map<OWLDataPropertyExpression, Set<OWLLiteral>> dataProperties = ind
 					.getDataPropertyValues(o);
 			for (Entry<OWLDataPropertyExpression, Set<OWLLiteral>> d : dataProperties.entrySet()) {
@@ -251,7 +254,7 @@ public class SemanticService {
 			if (isMA) {
 				instance.saveMA(i.createMitarbeiter());
 			}
-
+			
 			instance.save(i);
 
 		}
