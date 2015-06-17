@@ -36,6 +36,7 @@ public class ContactForm extends FormLayout {
     TextField email = new TextField("Email");
     TextField gehalt = new TextField("Gehalt");
     TextField erfahrungsjahre = new TextField("Erfahrungsjahre");
+    ComboBox abteilung = new ComboBox("Abteilung");
     
     
     EmployeeRow[] emps = new EmployeeRow[10];
@@ -122,8 +123,10 @@ public class ContactForm extends FormLayout {
         email.setRequired(true);
         gehalt.setRequired(true);
         erfahrungsjahre.setRequired(true);
+        abteilung.setRequired(true);
         
-		addComponents(actions, name, beschreibung, email, gehalt, erfahrungsjahre);
+        
+		addComponents(actions, name, beschreibung, email, gehalt, erfahrungsjahre,abteilung);
     }
 
 
@@ -134,14 +137,17 @@ public class ContactForm extends FormLayout {
         	email.commit();
         	gehalt.commit();
         	erfahrungsjahre.commit();
+        	abteilung.commit();
         	
             formFieldBindings.commit();
+            
             
             getUI().semService.saveIndividual(this.name.getValue(), "Mitarbeiter");
             getUI().semService.saveDataProperty(this.name.getValue(), "Beschreibung", this.beschreibung.getValue());
             getUI().semService.saveDataProperty(this.name.getValue(), "hatEmailAdresse", this.email.getValue());
             getUI().semService.saveDataProperty(this.name.getValue(), "Gehalt", this.gehalt.getValue());
             getUI().semService.saveDataProperty(this.name.getValue(), "Erfahrungsjahre", this.erfahrungsjahre.getValue());
+            getUI().semService.saveObjectProperty(this.name.getValue(), "arbeitetInAbteilung",(String) this.abteilung.getValue());
             
             for (int i = 0; i < rows && i < 10; i++) {
             	getUI().semService.saveObjectProperty(this.name.getValue(),(String)emps[i].select.getValue(),emps[i].objekt.getValue());
@@ -178,6 +184,9 @@ public class ContactForm extends FormLayout {
 
     void edit(Mitarbeiter mitarbeiter) {
         this.mitarbeiter = mitarbeiter;
+        for (Individual i :  getUI().semService.getIndividualByClass("<http://www.semanticweb.org/semanticOrg#Abteilung>")){
+        	abteilung.addItems(AddressbookUI.cutOutName(i.getIndividualName()));
+        }
         if(mitarbeiter != null) {
             // Bind the properties of the contact POJO to fiels in this form
             formFieldBindings = BeanFieldGroup.bindFieldsBuffered(mitarbeiter, this);

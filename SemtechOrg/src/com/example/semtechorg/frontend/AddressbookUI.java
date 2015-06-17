@@ -120,6 +120,19 @@ public class AddressbookUI extends UI {
                 Mitarbeiter.class, semService.findAllMA(stringFilter)));
         contactForm.setVisible(false);
     }
+    
+    void fliterContacts(String abteilung) {
+    	
+    	boolean doFilter = false;
+    	for ( Individual i :semService.getIndividualByClass("<http://www.semanticweb.org/semanticOrg#Abteilung>")){
+    		doFilter = (doFilter | cutOutName(i.getIndividualName()).equals(abteilung)); 
+    	}
+    	if (doFilter) 
+    		refreshContacts(abteilung);
+    	else
+    		refreshContacts("");
+        
+    }
 
     @WebServlet(urlPatterns = "/*")
     @VaadinServletConfiguration(ui = AddressbookUI.class, productionMode = false)
@@ -148,6 +161,8 @@ public class AddressbookUI extends UI {
     }
     
     public static String cutOutName (String iri){
+    	if (iri == null || iri.equals(""))
+    		return "";
     	System.out.println(iri);
     	String tmp[] = iri.split("#");
     	return tmp[1].substring(0, tmp[1].length()-1);

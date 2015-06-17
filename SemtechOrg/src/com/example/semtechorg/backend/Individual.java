@@ -8,6 +8,8 @@ import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.reasoner.NodeSet;
 
+import com.example.semtechorg.frontend.AddressbookUI;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -100,6 +102,9 @@ public class Individual implements Serializable, Cloneable {
 		m.setGehalt(getPropertyValue("<http://www.semanticweb.org/semanticOrg#Gehalt>"));
 		m.setEmail(getPropertyValue("<http://www.semanticweb.org/semanticOrg#hatEmailAdresse>"));
 		m.setErfahrungsjahre(getPropertyValue("<http://www.semanticweb.org/semanticOrg#Erfahrungsjahre>"));
+		m.setAbteilung(AddressbookUI.cutOutName(getPropertyValue("<http://www.semanticweb.org/semanticOrg#arbeitetInAbteilung>")));
+		//m.setAbteilung(getPropertyValue("<http://www.semanticweb.org/semanticOrg#arbeitetInAbteilung>"));
+		
 		m.setId(id);
 		return m;
 	}

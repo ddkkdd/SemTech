@@ -15,7 +15,15 @@ import java.util.Date;
 // class and nothing Vaadin specific.
 public class Mitarbeiter implements Serializable, Cloneable {
 
-    /**
+    @Override
+	public String toString() {
+		return "Mitarbeiter [id=" + id + ", Name=" + Name + ", Beschreibung=" + Beschreibung
+				+ ", Gehalt=" + Gehalt + ", Erfahrungsjahre=" + Erfahrungsjahre + ", Email="
+				+ Email + ", Abteilung=" + Abteilung + ", Bereich=" + Bereich + ", Sparte="
+				+ Sparte + "]";
+	}
+
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5186107535815311412L;
@@ -27,7 +35,9 @@ public class Mitarbeiter implements Serializable, Cloneable {
     private String Gehalt = "";
     private String Erfahrungsjahre = "";
     private String Email = "";
-    
+    private String Abteilung = "";
+    private String Bereich = "";
+    private String Sparte = "";
 
     
     
@@ -91,6 +101,14 @@ public class Mitarbeiter implements Serializable, Cloneable {
 
 	public void setErfahrungsjahre(String erfahrungsjahre) {
 		Erfahrungsjahre = erfahrungsjahre;
+	}
+
+	public String getAbteilung() {
+		return Abteilung;
+	}
+
+	public void setAbteilung(String abteilung) {
+		Abteilung = abteilung;
 	}
 
 }

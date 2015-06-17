@@ -88,10 +88,6 @@ public class SemanticService {
 		System.out.println("Print object properties...");
 		System.out.println(getObjectProperties());
 
-		// instance.saveObjectProperty("Helmberger_Peter", "istVorgesetzterVon",
-		// "Burgstaller_Andreas");
-		// instance.saveObjectProperty("Helmberger_Peter", "istVorgesetzterVon",
-		// "sepp");
 
 		try {
 			// instance.saveDataProperty("Helmberger_Peter", "Erfahrungsjahre",
@@ -231,20 +227,7 @@ public class SemanticService {
 					}
 				}
 			}
-//			Map<OWLObjectPropertyExpression, Set<OWLIndividual>> objectProperties = ind
-//					.getObjectPropertyValues(o);
-//			for (Entry<OWLObjectPropertyExpression, Set<OWLIndividual>> d : objectProperties
-//					.entrySet()) {
-//				if (d.getKey() != null) {
-//					for (OWLIndividual s : d.getValue()) {
-//						opm.add(new OWLConcept(d.getKey().toString(), s.toString()));
-//						// System.out.println(d.getKey().toString()+"  ---  "+s.toString());
-//
-//					}
-//				}
-//			}
-//	
-//////////////////////////////
+
 			Map<OWLObjectPropertyExpression, Set<OWLIndividual>> assertedValues = ind
 					.getObjectPropertyValues(o);
 			System.out.println("Anzahl->" + assertedValues.size());
@@ -255,15 +238,12 @@ public class SemanticService {
 							boolean asserted = false;
 							if (assertedValues.get(objProp) != null) {
 								asserted = assertedValues.get(objProp).contains(ind);
-								
 							}
 							opm.add(new OWLConcept(objProp.toString(), i.toString()));
 					}
 				}
-			}
-////////////////////////////////						
+			}					
 			
-
 			isMA = false;
 			List<String> classes = new LinkedList<String>();
 			NodeSet<OWLClass> owlclasses = reasoner.getTypes(ind, false);
@@ -305,17 +285,17 @@ public class SemanticService {
 	}
 
 	public synchronized List<Mitarbeiter> findAllMA(String stringFilter) {
-		// pehe
+		
 		try {
 			loadOntology();
 		} catch (OWLOntologyCreationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
 		ArrayList<Mitarbeiter> arrayList = new ArrayList<Mitarbeiter>();
 		for (Mitarbeiter i : mitarbeiter.values()) {
-			System.out.println(i);
+			
 			try {
 				boolean passesFilter = (stringFilter == null || stringFilter.isEmpty())
 						|| i.toString().toLowerCase().contains(stringFilter.toLowerCase());
