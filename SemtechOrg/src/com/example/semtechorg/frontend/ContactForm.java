@@ -170,7 +170,7 @@ public class ContactForm extends FormLayout {
         } catch (FieldGroup.CommitException e) {
         
         } catch (InvalidValueException  e) {
-        	new Notification("Alle Felder mÃ¼ssen befÃ¼llt sein",
+        	new Notification("Alle Felder müssen befüllt sein",
         			
         			"",
         		    Notification.TYPE_ERROR_MESSAGE, true)
@@ -193,6 +193,8 @@ public class ContactForm extends FormLayout {
     }
 
     void edit(Mitarbeiter mitarbeiter) {
+    	emps = new EmployeeRow[10];
+    	rows = 0;
         this.mitarbeiter = mitarbeiter;
         for (Individual i :  getUI().semService.getIndividualByClass("<http://www.semanticweb.org/semanticOrg#Abteilung>")){
         	abteilung.addItems(AddressbookUI.cutOutName(i.getIndividualName()));
@@ -202,6 +204,7 @@ public class ContactForm extends FormLayout {
             formFieldBindings = BeanFieldGroup.bindFieldsBuffered(mitarbeiter, this);
             name.focus();
         }
+        getUI().contactList.setVisible(!(mitarbeiter != null));
         setVisible(mitarbeiter != null);
     }
     

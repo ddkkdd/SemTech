@@ -80,7 +80,7 @@ public class AddressbookUI extends UI {
 		showDetail.addClickListener(e -> individualForm.show(
 				semService.getIndividualByName(((Mitarbeiter) contactList.getSelectedRow()).getName())));
 				
-        filter.setInputPrompt("Filter contacts...");
+        filter.setInputPrompt("Mitarbeiter suchen...");
         
         filter.addTextChangeListener(e -> refreshContacts(e.getText()));
 

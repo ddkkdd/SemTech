@@ -450,7 +450,7 @@ public class SemanticService {
 			m.applyChange(removeAxiom);
 			System.out.println(addAxiomChange);
 			throw new Exception("Axiom (" + sString + " " + cString
-					+ ") wÃ¼rde zu einer Inkonsitenz in der Ontologie fÃ¼hren");
+					+ ") würde zu einer Inkonsitenz in der Ontologie führen");
 		} else {
 			m.saveOntology(o);
 		}
