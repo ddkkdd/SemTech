@@ -458,4 +458,40 @@ public class SemanticService {
 			m.saveOntology(o);
 		}
 	}
+	
+	
+	public void deleteDataProperty(String sString, String opString, String value) throws Exception {
+		System.out.println(sString);
+		System.out.println(opString);
+		
+		OWLIndividual subject = df.getOWLNamedIndividual(IRI.create(iri + "#" + AddressbookUI.cutOutName(sString)));
+		OWLLiteral literal = df.getOWLLiteral(value);
+
+		try {
+			int foo = Integer.parseInt(value);
+			literal = df.getOWLLiteral(foo);
+		} catch (NumberFormatException e) {
+			//nothing
+		}
+
+		OWLDataProperty dataProperty = df.getOWLDataProperty(IRI.create(iri + "#" + AddressbookUI.cutOutName(opString)));
+		OWLAxiom assertion = df.getOWLDataPropertyAssertionAxiom(dataProperty, subject, literal);
+
+		RemoveAxiom remAxiomChange = new RemoveAxiom(o, assertion);
+		System.out.println("Reasoner consistent? " + reasoner.isConsistent());
+		System.out.println(remAxiomChange);
+		m.applyChange(remAxiomChange);
+		reasoner.flush();
+
+		System.out.println("Reasoner consistent? " + reasoner.isConsistent());
+		if (!reasoner.isConsistent()) {
+			AddAxiom addAxiom = new AddAxiom(o, assertion);
+			m.applyChange(addAxiom);
+			
+			throw new Exception("Axiom (" + sString + " " + opString + " " + value
+					+ ") würde zu einer Inkonsitenz in der Ontologie führen");
+		} else {
+			m.saveOntology(o);
+		}
+	}
 }

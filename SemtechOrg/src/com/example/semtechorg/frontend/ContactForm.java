@@ -51,6 +51,7 @@ public class ContactForm extends FormLayout {
 
     SemanticService semService = SemanticService.createDemoService();
     
+    
     Mitarbeiter mitarbeiter;
 
     // Easily bind forms to beans and manage validation and buffering

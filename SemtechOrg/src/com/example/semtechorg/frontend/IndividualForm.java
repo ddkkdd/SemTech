@@ -10,6 +10,7 @@ import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.Page;
+import com.vaadin.server.Resource;
 import com.vaadin.shared.ui.MarginInfo;
 import com.example.semtechorg.backend.*;
 import com.vaadin.ui.*;
@@ -79,7 +80,16 @@ public class IndividualForm extends FormLayout {
             	l2.addStyleName("fancyvalue");
             	hlp.addComponent(l1);
             	hlp.addComponent(l2);
+            	
+            	it.setType(this.individual.getIndividualName());
+            	Button x = new Button("X",this::save);
+            	x.setData(it);
+            	x.addStyleName(ValoTheme.BUTTON_DANGER);
+            	
+            	hlp.addComponent(x);
+            	
             	vl2.addComponent(hlp);
+            	
             }
             
             
@@ -97,7 +107,28 @@ public class IndividualForm extends FormLayout {
             
             // The composition root MUST be set
             setCompositionRoot(p);
+            
         }
+        
+        public void save(Button.ClickEvent event)   {
+        	System.out.println("oben");
+        	System.out.println(event.getButton().getData());
+        	OWLConcept oc = (OWLConcept) event.getButton().getData();
+        	try {
+				semService.deleteDataProperty(oc.getType(), oc.getName(), oc.getValue());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	((AddressbookUI) getUI()).refreshContacts();
+        	((AddressbookUI) getUI()).contactList.setVisible(true);
+        	((AddressbookUI) getUI()).contactList.select(null);
+        	((AddressbookUI) getUI()).individualForm.setVisible(false);
+        }
+        
+    }
+    public void save(Button.ClickEvent event) {
+    	
     }
 
     public IndividualForm() {

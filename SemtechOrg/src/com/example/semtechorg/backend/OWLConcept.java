@@ -5,6 +5,11 @@ import java.io.Serializable;
 import org.apache.commons.beanutils.BeanUtils;
 
 public class OWLConcept implements Serializable, Cloneable {
+	@Override
+	public String toString() {
+		return "OWLConcept [name=" + name + ", value=" + value + ", type=" + type + "]";
+	}
+
 	public OWLConcept(String name, String value) {
 		super();
 		this.name = name;
